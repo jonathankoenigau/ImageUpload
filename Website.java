@@ -5,6 +5,8 @@ import javafx.scene.layout.*;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.*;
 import javafx.scene.text.Font;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.geometry.*;
 import javafx.event.*; 
 
@@ -161,9 +163,6 @@ public class Website extends Application
             }
         );
         root.getChildren().add(logInButton);
-        
-        // custom code above --------------------------------------------
-        mainStage.show();
     }
     
     /**
@@ -183,14 +182,37 @@ public class Website extends Application
         
         // *** Temporary Login Code ***
         
+        // Username Row
+        HBox usernameRow = new HBox();
+        usernameRow.setPadding( new Insets(16) );
+        usernameRow.setSpacing(16);
+        
+        Label usernameLabel = new Label("Username: ");
         
         TextField usernameField = new TextField();
         root.getChildren().add(usernameField);
+        
+        usernameRow.getChildren().addAll(usernameLabel, usernameField);
+        root.getChildren().add(usernameRow);
+        
+        // Password Row
+        HBox passwordRow = new HBox();
+        passwordRow.setPadding( new Insets(16) );
+        passwordRow.setSpacing(16);
+        
+        Label passwordLabel = new Label("Password: ");
+        
+        TextField passwordField = new TextField();
+        root.getChildren().add(passwordField);
+        
+        passwordRow.getChildren().addAll(passwordLabel, passwordField);
+        root.getChildren().add(passwordRow);
         
         Button logInButton = new Button("Login");
         logInButton.setOnAction(
             (ActionEvent event) ->
             {
+                // Change this to check if the account exists
                 if(!usernameField.getText().equals(""))
                 {
                     currentUser = usernameField.getText();
@@ -199,9 +221,93 @@ public class Website extends Application
             }
         );
         root.getChildren().add(logInButton);
+    }
+    
+    /**
+     * This method sets up the scene for the Upload Image page.
+     */
+    public void uploadImagePage (Stage mainStage)
+    {
+        mainStage.setTitle("Upload Image");
         
-        // custom code above --------------------------------------------
-        mainStage.show();
+        // Initial Setup
+        VBox root = basicSetup(mainStage);
+        
+        Scene mainScene = new Scene(root, width, height);
+        mainStage.setScene(mainScene);
+        
+        // Website Elements
+        
+        Label fileLabel = new Label("None");
+        root.getChildren().add(fileLabel);
+        
+        // File Chooser
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Select Image File");
+        
+        ExtensionFilter imageFilter = new ExtensionFilter(
+            "Image Files", "*.png", "*.jpg", "*.jpeg");
+            
+        fileChooser.getExtensionFilters().add(imageFilter);
+        
+        Button fileButton = new Button("File");
+        fileButton.setOnAction(
+            (ActionEvent event) ->
+            {
+                File imageFileTemp = fileChooser.showOpenDialog(mainStage);
+                if (imageFileTemp != null)
+                {
+                    fileLabel.setText(imageFileTemp.getPath());
+                }
+            }
+        );
+        
+        root.getChildren().add(fileButton);
+        
+        Button uploadButton = new Button("Upload");
+        uploadButton.setOnAction(
+            (ActionEvent event) ->
+            {
+                // A method to check if the file can be uploaded
+                // (ex. If the file exists, if the file is too large)
+                // and then uploads the file.
+                // Return a boolean so this method knows if the file
+                // successfully uploaded or not.
+                
+                // If it uploaded, go to the page where the image was uploaded.
+                // For now, this just uses the path of the original image
+                if(!fileLabel.getText().equals("None"))
+                {
+                    imagePage(mainStage, fileLabel.getText());
+                }
+            }
+        );
+        // Add Button
+        root.getChildren().add(uploadButton);
+    }
+    
+    /**
+     * This method sets up the scene for the Image page.
+     * 
+     * imagePath is used to get the image that should be shown on the page.
+     * This can be changed if a better way to show the image is found.
+     */
+    public void imagePage (Stage mainStage, String imagePath)
+    {
+        mainStage.setTitle("Image");
+        
+        // Initial Setup
+        VBox root = basicSetup(mainStage);
+        
+        Scene mainScene = new Scene(root, width, height);
+        mainStage.setScene(mainScene);
+        
+        // Website Elements
+        
+        // Currently this doesn't show the image
+        ImageView image = new ImageView();
+        image.setImage(new Image(imagePath));
+        root.getChildren().add(image);
     }
     
     /**
@@ -247,6 +353,22 @@ public class Website extends Application
         );
         // Add Button
         headerRow.getChildren().add(homeButton);
+        
+        // If a user is logged in
+        if(currentUser != null)
+        {
+            // Upload Image Button
+            Button uploadImageButton = new Button("Upload an Image");
+            // Button OnClick
+            uploadImageButton.setOnAction(
+                (ActionEvent event) ->
+                {
+                    uploadImagePage(mainStage);
+                }
+            );
+            // Add Button
+            headerRow.getChildren().add(uploadImageButton);
+        }
         
         // If a user isn't logged in
         if(currentUser == null)
