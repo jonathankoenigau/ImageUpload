@@ -5,8 +5,9 @@ import javafx.scene.layout.*;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.*;
 import javafx.scene.text.Font;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+import javafx.scene.image.*;
+import javafx.scene.canvas.*;
+import javafx.scene.paint.*;
 import javafx.geometry.*;
 import javafx.event.*; 
 
@@ -63,9 +64,10 @@ public class Website extends Application
         mainStage.setTitle("Image Uploading");
         
         // Initial Setup
-        VBox root = basicSetup(mainStage);
+        ScrollPane scroll = basicSetup(mainStage);
+        VBox root = (VBox) scroll.getContent();
         
-        Scene mainScene = new Scene(root, width, height);
+        Scene mainScene = new Scene(scroll, width, height);
         mainStage.setScene(mainScene);
         
         // Website Elements
@@ -85,9 +87,10 @@ public class Website extends Application
         mainStage.setTitle("Create an Account");
         
         // Initial Setup
-        VBox root = basicSetup(mainStage);
+        ScrollPane scroll = basicSetup(mainStage);
+        VBox root = (VBox) scroll.getContent();
         
-        Scene mainScene = new Scene(root, width, height);
+        Scene mainScene = new Scene(scroll, width, height);
         mainStage.setScene(mainScene);
         
         // Website Elements
@@ -173,9 +176,10 @@ public class Website extends Application
         mainStage.setTitle("Login");
         
         // Initial Setup
-        VBox root = basicSetup(mainStage);
+        ScrollPane scroll = basicSetup(mainStage);
+        VBox root = (VBox) scroll.getContent();
         
-        Scene mainScene = new Scene(root, width, height);
+        Scene mainScene = new Scene(scroll, width, height);
         mainStage.setScene(mainScene);
         
         // Website Elements
@@ -231,9 +235,10 @@ public class Website extends Application
         mainStage.setTitle("Upload Image");
         
         // Initial Setup
-        VBox root = basicSetup(mainStage);
+        ScrollPane scroll = basicSetup(mainStage);
+        VBox root = (VBox) scroll.getContent();
         
-        Scene mainScene = new Scene(root, width, height);
+        Scene mainScene = new Scene(scroll, width, height);
         mainStage.setScene(mainScene);
         
         // Website Elements
@@ -275,10 +280,13 @@ public class Website extends Application
                 // successfully uploaded or not.
                 
                 // If it uploaded, go to the page where the image was uploaded.
-                // For now, this just uses the path of the original image
+                // This should go to the copied image in the user's folder
                 if(!fileLabel.getText().equals("None"))
                 {
-                    imagePage(mainStage, fileLabel.getText());
+                    // This method doesn't work with a full file path,
+                    // so for now just use a test image.
+                    // imagePage(mainStage, fileLabel.getText(), username);
+                    imagePage(mainStage, "images/test.png", currentUser);
                 }
             }
         );
@@ -292,22 +300,74 @@ public class Website extends Application
      * imagePath is used to get the image that should be shown on the page.
      * This can be changed if a better way to show the image is found.
      */
-    public void imagePage (Stage mainStage, String imagePath)
+    public void imagePage (Stage mainStage, String imagePath, String userString)
     {
         mainStage.setTitle("Image");
         
         // Initial Setup
-        VBox root = basicSetup(mainStage);
+        ScrollPane scroll = basicSetup(mainStage);
+        VBox root = (VBox) scroll.getContent();
         
-        Scene mainScene = new Scene(root, width, height);
+        Scene mainScene = new Scene(scroll, width, height);
         mainStage.setScene(mainScene);
         
         // Website Elements
         
-        // Currently this doesn't show the image
+        // Maybe adding an image should be it's own method?
+        // This method could also make all the images clickable so it would
+        // go to that image's imagePage.
         ImageView image = new ImageView();
         image.setImage(new Image(imagePath));
         root.getChildren().add(image);
+        
+        // Uploaded By Row
+        HBox uploadedByRow = new HBox();
+        uploadedByRow.setPadding( new Insets(16) );
+        uploadedByRow.setSpacing(16);
+        
+        Label uploadedByLabel = new Label("Uploaded By: ");
+        uploadedByRow.getChildren().add(uploadedByLabel);
+        
+        Button uploadedByButton = new Button(userString);
+        uploadedByButton.setOnAction(
+            (ActionEvent event) ->
+            {
+                userPage(mainStage, userString);
+            }
+        );
+        uploadedByRow.getChildren().add(uploadedByButton);
+        
+        root.getChildren().add(uploadedByRow);
+    }
+    
+    /**
+     * This method set up the scene for a User's page.
+     * 
+     * userString is the user's name, which will be used to check if the
+     * user exists and used to display any image they uploaded.
+     */
+    public void userPage (Stage mainStage, String userString)
+    {
+        mainStage.setTitle(userString);
+        
+        // Initial Setup
+        ScrollPane scroll = basicSetup(mainStage);
+        VBox root = (VBox) scroll.getContent();
+        
+        Scene mainScene = new Scene(scroll, width, height);
+        mainStage.setScene(mainScene);
+        
+        // Website Elements
+        Label userHeaderLabel = new Label(userString);
+        root.getChildren().add(userHeaderLabel);
+        
+        // Have a check to see if the user actually exists
+        
+        // If the user exists
+        // Use a for loop to show all the images this user uploaded
+        
+        // If the user doesn't exist
+        // Show some text saying the user doesn't exist
     }
     
     /**
@@ -315,12 +375,19 @@ public class Website extends Application
      * 
      * This includes the header of the website, upload/account buttons, etc.
      */
-    public VBox basicSetup (Stage mainStage)
+    public ScrollPane basicSetup (Stage mainStage)
     {
+        // This will scroll the entire website
+        ScrollPane scroll = new ScrollPane();
+        scroll.setPrefSize(width, height);
+        scroll.setFitToWidth(true);
+        
         // This will hold the entire website
         VBox root = new VBox();
         root.setPadding( new Insets(16) );
         root.setSpacing(16);
+        
+        scroll.setContent(root);
         
         // This will hold the top of the website
         VBox header = new VBox();
@@ -429,6 +496,6 @@ public class Website extends Application
         
         header.getChildren().add(headerRow);
         
-        return root;
+        return scroll;
     }
 }
