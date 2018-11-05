@@ -27,6 +27,8 @@ import nu.xom.*;
  * 
  * It will show a layout similar to a website that will be used to run
  * other methods in the program.
+ * 
+ * @author Jonathan Koenig
  */
 public class Website extends Application
 {
@@ -57,7 +59,7 @@ public class Website extends Application
      * This method will set up the initial scene, AKA the homepage
      * of the website.
      * 
-     * mainStage is where the scenes are placed.
+     * @param mainStage This is where the scene is placed.
      */
     public void start(Stage mainStage)
     {
@@ -81,6 +83,8 @@ public class Website extends Application
     
     /**
      * This method sets up the scene for the Create Account page.
+     * 
+     * @param mainStage This is where the scene is placed.
      */
     public void createAccountPage (Stage mainStage)
     {
@@ -170,6 +174,8 @@ public class Website extends Application
     
     /**
      * This method sets up the scene for the Login page.
+     * 
+     * @param mainStage This is where the scene is placed.
      */
     public void logInPage (Stage mainStage)
     {
@@ -229,6 +235,8 @@ public class Website extends Application
     
     /**
      * This method sets up the scene for the Upload Image page.
+     * 
+     * @param mainStage This is where the scene is placed.
      */
     public void uploadImagePage (Stage mainStage)
     {
@@ -297,8 +305,12 @@ public class Website extends Application
     /**
      * This method sets up the scene for the Image page.
      * 
-     * imagePath is used to get the image that should be shown on the page.
+     * @param mainStage This is where the scene is placed.
+     * @param imagePath This is used to get the image that should be shown on 
+     * the page.
      * This can be changed if a better way to show the image is found.
+     * @param userString This is the user that uploaded the image.
+     * This can be changed if the user can be obtained from the path.
      */
     public void imagePage (Stage mainStage, String imagePath, String userString)
     {
@@ -343,8 +355,9 @@ public class Website extends Application
     /**
      * This method set up the scene for a User's page.
      * 
-     * userString is the user's name, which will be used to check if the
-     * user exists and used to display any image they uploaded.
+     * @param mainStage This is where the scene is placed.
+     * @param userString This is the user's name, which will be used to check 
+     * if the user exists and used to display any image they uploaded.
      */
     public void userPage (Stage mainStage, String userString)
     {
@@ -374,6 +387,12 @@ public class Website extends Application
      * This method sets up parts of the website that all pages should share.
      * 
      * This includes the header of the website, upload/account buttons, etc.
+     * 
+     * @param mainStage This is where the scene is placed.
+     * 
+     * @return ScrollPane This returns a ScrollPane holding the header of the
+     * website in a VBox. This VBox should be obtained using
+     * ScrollPane.getContent().
      */
     public ScrollPane basicSetup (Stage mainStage)
     {
