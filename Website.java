@@ -36,6 +36,8 @@ public class Website extends Application
     private double width = 1280;
     private double height = 720;
     
+    private Backend backend = new Backend();
+    
     private String currentUser = null;
     
     // Run this method to start the program
@@ -149,11 +151,13 @@ public class Website extends Application
         logInButton.setOnAction(
             (ActionEvent event) ->
             {
-                // If the username field isn't blank and the passwords match.
-                // TO ADD: If user doesn't already exist, if username/password
+                // If the username field isn't blank, the passwords match, and
+                // the password is valid..
+                // TO ADD: If user doesn't already exist, if username
                 //         is too long, etc.
                 if(!usernameField.getText().equals("") &&
-                    passwordField.getText().equals(passwordTwoField.getText()))
+                    passwordField.getText().equals(passwordTwoField.getText())
+                    && Backend.isValid(passwordField.getText()))
                 {
                     // Send Username and Password to a method that will store
                     // the data.
