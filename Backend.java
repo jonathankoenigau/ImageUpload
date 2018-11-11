@@ -43,7 +43,7 @@ public class Backend
         return true;
     }
     
-    public static void moveImage(String filepath, String username) {
-        ImageFactory.moveImage(filepath, username);
+    public static String moveImage(String filepath, String username) {
+        return ImageFactory.moveImage(filepath, username);
     }
 }

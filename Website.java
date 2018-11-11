@@ -297,8 +297,8 @@ public class Website extends Application
                     // This method doesn't work with a full file path,
                     // so for now just use a test image.
                     // imagePage(mainStage, fileLabel.getText(), username);
-                    Backend.moveImage(fileLabel.getText(), currentUser);
-                    imagePage(mainStage, "images/test.png", currentUser);
+                    String imagePath = Backend.moveImage(fileLabel.getText(), currentUser);
+                    imagePage(mainStage, imagePath, currentUser);
                 }
             }
         );

@@ -6,7 +6,7 @@ import java.nio.*;
 // Displaying file property and move file
 class ImageFactory
 { 
-    public static void moveImage(String filePath, String username) { 
+    public static String moveImage(String filePath, String username) { 
         //pass the filename or directory name to File object 
         File f = new File(filePath); 
 
@@ -46,16 +46,22 @@ class ImageFactory
 
                 //This is where the move happens
                 File oldFile = new File(f.getAbsolutePath());
+                File newFile = new File(f2.getAbsolutePath() + "\\" + f.getName());
 
-                if (oldFile.renameTo(new File(f2.getAbsolutePath() + "\\" + f.getName()))){
+                if (oldFile.renameTo(newFile)){
                     System.out.println("The file was moved succesfully.");
+                    // This specific URL was found here:
+                    // https://stackoverflow.com/a/8088561
+                    return newFile.toURI().toString();
                 }
                 else{
                     System.out.println("The file was not moved.");
+                    return "images/test.png";
                 }
 
             
             } 
         } 
+        return "images/test.png";
     } 
 } 
