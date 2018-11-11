@@ -36,8 +36,6 @@ public class Website extends Application
     private double width = 1280;
     private double height = 720;
     
-    private Backend backend = new Backend();
-    
     private String currentUser = null;
     
     // Run this method to start the program
@@ -161,6 +159,7 @@ public class Website extends Application
                 {
                     // Send Username and Password to a method that will store
                     // the data.
+                    Backend.addUser(usernameField.getText(), passwordField.getText());
                     
                     messageLabel.setText("The account was successfully created!");
                 }
@@ -298,6 +297,7 @@ public class Website extends Application
                     // This method doesn't work with a full file path,
                     // so for now just use a test image.
                     // imagePage(mainStage, fileLabel.getText(), username);
+                    Backend.moveImage(fileLabel.getText(), currentUser);
                     imagePage(mainStage, "images/test.png", currentUser);
                 }
             }

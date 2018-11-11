@@ -18,37 +18,32 @@ public class Backend
         userFactory = new UserFactory();
     }
 
-    public void addUser (String username, String password, String confirmPassword) {
-        userFactory.openFile();
-        userFactory.addRecord(username, password, confirmPassword);
-        userFactory.closeFile();
+    public static void addUser (String username, String password) {
+        UserFactory.addRecord(username, password);
+    }
+
+    public static boolean isValid(String password) {
+        if (password.length() > 50) { 
+            return false;
+        } else {    
+            char c;
+            int count = 1; 
+            for (int i = 0; i < password.length() - 1; i++) {
+                c = password.charAt(i);
+                if (!Character.isLetterOrDigit(c)) {        
+                    return false;
+                } else if (Character.isDigit(c)) {
+                    count++;
+                    if (count < 6)  {   
+                        return false;
+                    }   
+                }
+            }
+        }
+        return true;
     }
     
-    public static boolean isValid(String password) {
-		if (password.length() > 50) { 
-			return false;
-		} else {	
-	 		char c;
-			int count = 1; 
-			for (int i = 0; i < password.length() - 1; i++) {
-				c = password.charAt(i);
-				if (!Character.isLetterOrDigit(c)) {		
-					return false;
-				} else if (Character.isDigit(c)) {
-					count++;
-					if (count < 6)	{	
-						return false;
-					}	
-				}
-			}
-		}
-		return true;
-	}
-}
-    
-    
-    
-    
-    
-    
+    public static void moveImage(String filepath, String username) {
+        ImageFactory.moveImage(filepath, username);
+    }
 }

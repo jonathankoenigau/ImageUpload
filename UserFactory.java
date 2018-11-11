@@ -4,27 +4,41 @@ import java.util.*;
 import java.nio.*;
 
 public class UserFactory{
-    private Formatter x;
-    
-    public void openFile(){
+
+    public static void addRecord (String username, String password) {
+        String input = username + " " + password;
+
         try{
-            x = new Formatter ("Database.txt");
+
+            File file =new File("Database.txt");
+            /* This logic is to create the file if the
+             * file is not already present
+             */
+            if(!file.exists()){
+                file.createNewFile();
+                System.out.println("New File database.txt created");
+            }
+
+            //Here true is to append the content to file
+            FileWriter fw = new FileWriter(file,true);
+            //BufferedWriter writer give better performance
+            BufferedWriter bw = new BufferedWriter(fw);
+            bw.write(input);
+            //Makes new line for the next user
+            bw.newLine();
+            //Closing BufferedWriter Stream
+            bw.close();
+
+            System.out.println("Data successfully appended at the end of file");
+
+        }catch(IOException ioe){
+            System.out.println("Exception occurred:");
+            ioe.printStackTrace();
         }
-        catch (Exception e) {
-            System.out.println("An error occured.");
-        }
-    
-    }
-    
-    public void addRecord () {
-        Scanner sc = new Scanner (System.in);
-        System.out.println ("Enter Username: ");
-        String username = sc.next();
-        System.out.println ("Enter Password: ");
-        String password = sc.next();
+
         
-        x.format("%s%s%s", username, "", password);
-        
+       
+        //creates folder for user 
         File f = new File(username);
         if (!f.exists()){
             f.mkdir();
@@ -33,9 +47,5 @@ public class UserFactory{
         else {
             System.err.println("Directory already exists.");
         }
-    }
-    
-    public void closeFile(){
-        x.close();
     }
 }
