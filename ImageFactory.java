@@ -56,12 +56,40 @@ class ImageFactory
                 }
                 else{
                     System.out.println("The file was not moved.");
-                    return "images/test.png";
+                    return "error.png";
                 }
 
-            
             } 
         } 
-        return "images/test.png";
+        
+        return "error.png";
     } 
+
+    public static File[] getFilePaths(String username){
+        //folderName can be replaced with username
+        File folder = new File(username);
+        if (!folder.exists()){
+            System.out.println("Doesn't exist.");
+        }
+
+        //File folder = new File("/Users/nurulhaque/CreatUser/userA");
+        File[] listOfFiles = folder.listFiles();
+
+        int size = listOfFiles.length;
+        System.out.println("Number of files: " + size);
+
+        if (size == 0){
+            System.out.println("Folder is empty.");
+        } else{
+
+            for (File file : listOfFiles) {
+                if (file.isFile()) {
+                    System.out.println("File Name: " + file.getName());
+                    System.out.println("Absolute path:" + file.getAbsolutePath());
+                } 
+            }
+        }
+        
+        return listOfFiles;
+    }
 } 

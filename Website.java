@@ -4,6 +4,7 @@ import javafx.scene.*;
 import javafx.scene.layout.*;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Font;
 import javafx.scene.image.*;
 import javafx.scene.canvas.*;
@@ -35,9 +36,9 @@ public class Website extends Application
     // Window Properties
     private double width = 1280;
     private double height = 720;
-    
+
     private String currentUser = null;
-    
+
     // Run this method to start the program
     public static void main(String[] args) 
     {
@@ -64,23 +65,21 @@ public class Website extends Application
     public void start(Stage mainStage)
     {
         mainStage.setTitle("Image Uploading");
-        
+
         // Initial Setup
         ScrollPane scroll = basicSetup(mainStage);
         VBox root = (VBox) scroll.getContent();
-        
+
         Scene mainScene = new Scene(scroll, width, height);
         mainStage.setScene(mainScene);
-        
+
         // Website Elements
-        
-        
-        
+
         
         // custom code above --------------------------------------------
         mainStage.show();
     }
-    
+
     /**
      * This method sets up the scene for the Create Account page.
      * 
@@ -89,78 +88,76 @@ public class Website extends Application
     public void createAccountPage (Stage mainStage)
     {
         mainStage.setTitle("Create an Account");
-        
+
         // Initial Setup
         ScrollPane scroll = basicSetup(mainStage);
         VBox root = (VBox) scroll.getContent();
-        
+
         Scene mainScene = new Scene(scroll, width, height);
         mainStage.setScene(mainScene);
-        
+
         // Website Elements
-        
+
         // A message showing that the account was created or wasn't created
         Label messageLabel = new Label("Initialized");
         messageLabel.setVisible(false);
-        
+
         root.getChildren().add(messageLabel);
-        
-        
+
         // Username Row
         HBox usernameRow = new HBox();
         usernameRow.setPadding( new Insets(16) );
         usernameRow.setSpacing(16);
-        
+
         Label usernameLabel = new Label("Username: ");
-        
+
         TextField usernameField = new TextField();
         root.getChildren().add(usernameField);
-        
+
         usernameRow.getChildren().addAll(usernameLabel, usernameField);
         root.getChildren().add(usernameRow);
-        
+
         // Password Row
         HBox passwordRow = new HBox();
         passwordRow.setPadding( new Insets(16) );
         passwordRow.setSpacing(16);
-        
+
         Label passwordLabel = new Label("Password: ");
-        
+
         TextField passwordField = new TextField();
         root.getChildren().add(passwordField);
-        
+
         passwordRow.getChildren().addAll(passwordLabel, passwordField);
         root.getChildren().add(passwordRow);
-        
+
         // Confirm Password Row
         HBox passwordTwoRow = new HBox();
         passwordTwoRow.setPadding( new Insets(16) );
         passwordTwoRow.setSpacing(16);
-        
+
         Label passwordTwoLabel = new Label("Confirm Password: ");
-        
+
         TextField passwordTwoField = new TextField();
         root.getChildren().add(passwordTwoField);
-        
+
         passwordTwoRow.getChildren().addAll(passwordTwoLabel, passwordTwoField);
         root.getChildren().add(passwordTwoRow);
-        
+
         Button logInButton = new Button("Create Account");
         logInButton.setOnAction(
             (ActionEvent event) ->
             {
-                // If the username field isn't blank, the passwords match, and
-                // the password is valid..
-                // TO ADD: If user doesn't already exist, if username
-                //         is too long, etc.
+                // If the username field isn't blank, the passwords match,
+                // the password is valid, and the username is valid.
                 if(!usernameField.getText().equals("") &&
-                    passwordField.getText().equals(passwordTwoField.getText())
-                    && Backend.isValid(passwordField.getText()))
+                passwordField.getText().equals(passwordTwoField.getText())
+                && Backend.isPasswordValid(passwordField.getText())
+                && Backend.isUsernameValid(usernameField.getText()))
                 {
                     // Send Username and Password to a method that will store
                     // the data.
                     Backend.addUser(usernameField.getText(), passwordField.getText());
-                    
+
                     messageLabel.setText("The account was successfully created!");
                 }
                 else
@@ -168,13 +165,13 @@ public class Website extends Application
                     messageLabel.setText("Account creation failed.");
                     // Include reason why the account wasn't created
                 }
-                
+
                 messageLabel.setVisible(true);
             }
         );
         root.getChildren().add(logInButton);
     }
-    
+
     /**
      * This method sets up the scene for the Login page.
      * 
@@ -183,44 +180,44 @@ public class Website extends Application
     public void logInPage (Stage mainStage)
     {
         mainStage.setTitle("Login");
-        
+
         // Initial Setup
         ScrollPane scroll = basicSetup(mainStage);
         VBox root = (VBox) scroll.getContent();
-        
+
         Scene mainScene = new Scene(scroll, width, height);
         mainStage.setScene(mainScene);
-        
+
         // Website Elements
-        
+
         // *** Temporary Login Code ***
-        
+
         // Username Row
         HBox usernameRow = new HBox();
         usernameRow.setPadding( new Insets(16) );
         usernameRow.setSpacing(16);
-        
+
         Label usernameLabel = new Label("Username: ");
-        
+
         TextField usernameField = new TextField();
         root.getChildren().add(usernameField);
-        
+
         usernameRow.getChildren().addAll(usernameLabel, usernameField);
         root.getChildren().add(usernameRow);
-        
+
         // Password Row
         HBox passwordRow = new HBox();
         passwordRow.setPadding( new Insets(16) );
         passwordRow.setSpacing(16);
-        
+
         Label passwordLabel = new Label("Password: ");
-        
+
         TextField passwordField = new TextField();
         root.getChildren().add(passwordField);
-        
+
         passwordRow.getChildren().addAll(passwordLabel, passwordField);
         root.getChildren().add(passwordRow);
-        
+
         Button logInButton = new Button("Login");
         logInButton.setOnAction(
             (ActionEvent event) ->
@@ -235,7 +232,7 @@ public class Website extends Application
         );
         root.getChildren().add(logInButton);
     }
-    
+
     /**
      * This method sets up the scene for the Upload Image page.
      * 
@@ -244,28 +241,28 @@ public class Website extends Application
     public void uploadImagePage (Stage mainStage)
     {
         mainStage.setTitle("Upload Image");
-        
+
         // Initial Setup
         ScrollPane scroll = basicSetup(mainStage);
         VBox root = (VBox) scroll.getContent();
-        
+
         Scene mainScene = new Scene(scroll, width, height);
         mainStage.setScene(mainScene);
-        
+
         // Website Elements
-        
+
         Label fileLabel = new Label("None");
         root.getChildren().add(fileLabel);
-        
+
         // File Chooser
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Select Image File");
-        
+
         ExtensionFilter imageFilter = new ExtensionFilter(
-            "Image Files", "*.png", "*.jpg", "*.jpeg");
-            
+                "Image Files", "*.png", "*.jpg", "*.jpeg");
+
         fileChooser.getExtensionFilters().add(imageFilter);
-        
+
         Button fileButton = new Button("File");
         fileButton.setOnAction(
             (ActionEvent event) ->
@@ -277,9 +274,9 @@ public class Website extends Application
                 }
             }
         );
-        
+
         root.getChildren().add(fileButton);
-        
+
         Button uploadButton = new Button("Upload");
         uploadButton.setOnAction(
             (ActionEvent event) ->
@@ -289,7 +286,7 @@ public class Website extends Application
                 // and then uploads the file.
                 // Return a boolean so this method knows if the file
                 // successfully uploaded or not.
-                
+
                 // If it uploaded, go to the page where the image was uploaded.
                 // This should go to the copied image in the user's folder
                 if(!fileLabel.getText().equals("None"))
@@ -305,7 +302,7 @@ public class Website extends Application
         // Add Button
         root.getChildren().add(uploadButton);
     }
-    
+
     /**
      * This method sets up the scene for the Image page.
      * 
@@ -319,31 +316,28 @@ public class Website extends Application
     public void imagePage (Stage mainStage, String imagePath, String userString)
     {
         mainStage.setTitle("Image");
-        
+
         // Initial Setup
         ScrollPane scroll = basicSetup(mainStage);
         VBox root = (VBox) scroll.getContent();
-        
+
         Scene mainScene = new Scene(scroll, width, height);
         mainStage.setScene(mainScene);
-        
+
         // Website Elements
-        
-        // Maybe adding an image should be it's own method?
-        // This method could also make all the images clickable so it would
-        // go to that image's imagePage.
+
         ImageView image = new ImageView();
         image.setImage(new Image(imagePath));
         root.getChildren().add(image);
-        
+
         // Uploaded By Row
         HBox uploadedByRow = new HBox();
         uploadedByRow.setPadding( new Insets(16) );
         uploadedByRow.setSpacing(16);
-        
+
         Label uploadedByLabel = new Label("Uploaded By: ");
         uploadedByRow.getChildren().add(uploadedByLabel);
-        
+
         Button uploadedByButton = new Button(userString);
         uploadedByButton.setOnAction(
             (ActionEvent event) ->
@@ -352,10 +346,10 @@ public class Website extends Application
             }
         );
         uploadedByRow.getChildren().add(uploadedByButton);
-        
+
         root.getChildren().add(uploadedByRow);
     }
-    
+
     /**
      * This method set up the scene for a User's page.
      * 
@@ -366,27 +360,89 @@ public class Website extends Application
     public void userPage (Stage mainStage, String userString)
     {
         mainStage.setTitle(userString);
-        
+
         // Initial Setup
         ScrollPane scroll = basicSetup(mainStage);
         VBox root = (VBox) scroll.getContent();
-        
+
         Scene mainScene = new Scene(scroll, width, height);
         mainStage.setScene(mainScene);
-        
+
         // Website Elements
         Label userHeaderLabel = new Label(userString);
         root.getChildren().add(userHeaderLabel);
-        
+
         // Have a check to see if the user actually exists
-        
+
         // If the user exists
         // Use a for loop to show all the images this user uploaded
-        
+        String[] userImages = Backend.getUserImages(userString);
+        int image = 0;
+        // Loop for rows
+        // Source for method for rounding up:
+        // https://stackoverflow.com/a/4540700
+        for(int i = 0; i < (int) Math.ceil(userImages.length / 4.0); i++)
+        {
+            // Loop for each image
+            HBox row = new HBox();
+            row.setPadding( new Insets(16) );
+            row.setSpacing(16);
+
+            for(int j = 0; j < 4; j++)
+            {
+                if(!(image >= userImages.length))
+                {
+                    row.getChildren().add(clickableImage(mainStage, userImages[image], userString));
+                    image++;
+                }
+            }
+            
+            root.getChildren().add(row);
+        }
+
         // If the user doesn't exist
         // Show some text saying the user doesn't exist
     }
-    
+
+    /**
+     * clickableImage - Sets up an ImageView of a 200x200 image that can be
+     * clicked to go to that image's page.
+     * 
+     * @param mainStage This is where the ImageView is shown.
+     * 
+     *        imageURL This is the url to the image file
+     * 
+     *        userString This is the user that uploaded the image. This should
+     *        be found automatically in the future
+     *        
+     * @return ImageView An ImageView with the image in a 200x200 box that
+     *         links to the image page for this image.
+     */
+    public ImageView clickableImage (Stage mainStage, String imageURL, String userString)
+    {   
+        ImageView image = new ImageView();
+        image.setImage(new Image(imageURL));
+        image.setPreserveRatio(false);
+        image.setFitWidth(200);
+        image.setFitHeight(200);
+
+        // This adds a mouse click event so that when the image is clicked,
+        // it goes to the image's page.
+        
+        // Source for making an image clickable:
+        // https://stackoverflow.com/a/25554726
+        image.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+
+            @Override
+            public void handle(MouseEvent event) {
+                imagePage(mainStage, imageURL, userString);
+                event.consume();
+            }
+        });
+        
+        return image;
+    }
+
     /**
      * This method sets up parts of the website that all pages should share.
      * 
@@ -404,34 +460,34 @@ public class Website extends Application
         ScrollPane scroll = new ScrollPane();
         scroll.setPrefSize(width, height);
         scroll.setFitToWidth(true);
-        
+
         // This will hold the entire website
         VBox root = new VBox();
         root.setPadding( new Insets(16) );
         root.setSpacing(16);
-        
+
         scroll.setContent(root);
-        
+
         // This will hold the top of the website
         VBox header = new VBox();
         header.setPadding( new Insets(16) );
         header.setSpacing(16);
         header.setAlignment(Pos.TOP_CENTER);
-        
+
         root.getChildren().add(header);
-        
+
         // Title of the website, could be replaced with an image
         Label title = new Label("Image Upload");
         title.setFont(new Font(36));
-        
+
         header.getChildren().add(title);
-        
+
         // *** The row under the title ***
         HBox headerRow = new HBox();
         headerRow.setPadding( new Insets(16) );
         headerRow.setSpacing(16);
         headerRow.setAlignment(Pos.TOP_CENTER);
-        
+
         // Home Button
         Button homeButton = new Button("Go back home");
         // Button OnClick
@@ -443,7 +499,7 @@ public class Website extends Application
         );
         // Add Button
         headerRow.getChildren().add(homeButton);
-        
+
         // If a user is logged in
         if(currentUser != null)
         {
@@ -459,7 +515,7 @@ public class Website extends Application
             // Add Button
             headerRow.getChildren().add(uploadImageButton);
         }
-        
+
         // If a user isn't logged in
         if(currentUser == null)
         {
@@ -481,7 +537,7 @@ public class Website extends Application
             Label userLabel = new Label("Welcome, " + currentUser + "!");
             headerRow.getChildren().add(userLabel);
         }
-        
+
         // If a user isn't logged in
         if(currentUser == null)
         {
@@ -506,19 +562,19 @@ public class Website extends Application
                 (ActionEvent event) ->
                 {
                     currentUser = null;
-                    
+
                     // Goes back to home page, but maybe just send them
                     // back to the page they were looking at.
                     start(mainStage);
                 }
             );
-            
+
             // Add Button
             headerRow.getChildren().add(logOutButton);
         }
-        
+
         header.getChildren().add(headerRow);
-        
+
         return scroll;
     }
 }
