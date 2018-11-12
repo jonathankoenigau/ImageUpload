@@ -197,8 +197,10 @@ public class Website extends Application
         mainStage.setScene(mainScene);
 
         // Website Elements
-
-        // *** Temporary Login Code ***
+        
+        Label loginFailedLabel = new Label("Login Failed.");
+        loginFailedLabel.setVisible(false);
+        root.getChildren().add(loginFailedLabel);
 
         // Username Row
         HBox usernameRow = new HBox();
@@ -231,10 +233,19 @@ public class Website extends Application
             (ActionEvent event) ->
             {
                 // Change this to check if the account exists
-                if(!usernameField.getText().equals(""))
+                if(!usernameField.getText().equals("") 
+                   && !passwordField.getText().equals(""))
                 {
-                    currentUser = usernameField.getText();
-                    start(mainStage);
+                    if(Backend.logInUser(usernameField.getText(), passwordField.getText()))
+                    {
+                        currentUser = usernameField.getText();
+                        start(mainStage);
+                    }
+                    else {
+                        loginFailedLabel.setVisible(true);
+                        usernameField.setText("");
+                        passwordField.setText("");
+                    }
                 }
             }
         );
