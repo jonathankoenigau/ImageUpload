@@ -3,9 +3,27 @@ import java.util.Scanner;
 import static java.nio.file.StandardCopyOption.*;
 import java.nio.*;
 
-// Displaying file property and move file
+/**
+* ImageFactory contains all methods associated with images.
+* 
+* It is used to move images to users' directories and return image
+* paths for displaying them.
+* 
+* @author   Nurul Haque
+*/
 class ImageFactory
 { 
+    /**
+     * moveImage moves the given image to the directory of the given user.
+     * 
+     * This is so the image is successfully uploaded and associated with the user.
+     * 
+     * @param   filepath The filepath to the image that should be moved.
+     *          username The user that is uploading the image. The file
+     *                   is moved to the folder of this user.
+     * 
+     * @return String of a formatted file path for the image's new location.
+     */
     public static String moveImage(String filePath, String username) { 
         //pass the filename or directory name to File object 
         File f = new File(filePath); 
@@ -36,7 +54,9 @@ class ImageFactory
             System.out.println("Absolute path:" +f2.getAbsolutePath()); 
             System.out.println("Parent:"+f2.getParent()); 
             System.out.println("Exists :"+f2.exists()); 
-            if(f.exists()) 
+            
+            // If file exists and is less than 20mb
+            if(f.exists() && f.length() < 2e+7) 
             { 
                 //more info about users folder
                 System.out.println("Is writeable:"+f2.canWrite()); 
@@ -48,23 +68,35 @@ class ImageFactory
                 File oldFile = new File(f.getAbsolutePath());
                 File newFile = new File(f2.getAbsolutePath() + "\\" + f.getName());
 
-                if (oldFile.renameTo(newFile)){
+                if (oldFile.renameTo(newFile)) {
                     System.out.println("The file was moved succesfully.");
                     // This specific URL was found here:
                     // https://stackoverflow.com/a/8088561
                     return newFile.toURI().toString();
                 }
-                else{
+                 {
                     System.out.println("The file was not moved.");
                     return "error.png";
                 }
 
             } 
+            else {
+                    System.out.println("The file was not moved.");
+                    return "error.png";
+            }
         } 
         
         return "error.png";
     } 
 
+    /**
+     * getUserImages gets all the images in username's folder and returns
+     * a File array of all the images.
+     * 
+     * @param   username The user that the images are associated with.
+     * 
+     * @return File[] of image files in the user's folder.
+     */
     public static File[] getFilePaths(String username){
         //folderName can be replaced with username
         File folder = new File(username);

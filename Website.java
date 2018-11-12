@@ -156,9 +156,17 @@ public class Website extends Application
                 {
                     // Send Username and Password to a method that will store
                     // the data.
-                    Backend.addUser(usernameField.getText(), passwordField.getText());
+                    boolean succeeded = Backend.addUser(usernameField.getText(), passwordField.getText());
 
-                    messageLabel.setText("The account was successfully created!");
+                    if(succeeded)
+                    {
+                        messageLabel.setText("The account was successfully created!");
+                    }
+                    else
+                    {
+                        messageLabel.setText("Account creation failed.");
+                        // Include reason why the account wasn't created
+                    }
                 }
                 else
                 {

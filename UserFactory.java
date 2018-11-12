@@ -3,9 +3,24 @@ import java.lang.*;
 import java.util.*;
 import java.nio.*;
 
+/**
+ * UserFactory contains all the methods associated with users.
+ * 
+ * @author  Nurul Haque
+ */
 public class UserFactory{
-
-    public static void addRecord (String username, String password) {
+    /**
+     * addRecord attempts to add the given username and password to the database.
+     * 
+     * It will create a database file if it doesn't already exist.
+     * 
+     * @param   username The user to be added to the database.
+     *          password The password for the user.
+     *          
+     * @return boolean. If true, the user was successfully added and a
+     * directory for the user was created.
+     */
+    public static boolean addRecord (String username, String password) {
         String input = username + " " + password;
 
         //creates folder for user 
@@ -35,14 +50,18 @@ public class UserFactory{
                 bw.close();
     
                 System.out.println("Data successfully appended at the end of file");
+                
+                return true;
     
             }catch(IOException ioe){
                 System.out.println("Exception occurred:");
                 ioe.printStackTrace();
+                return false;
             }
         }
         else {
             System.out.println("Username and Directory already exists. Please enter different username.");
+            return false;
         }
     }
 }

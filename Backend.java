@@ -1,41 +1,56 @@
 import java.io.File; 
 
 /**
- * Write a description of class Backend here.
+ * The Backend is what Website directly calls to interact and get
+ * information about files.
+ * 
+ * It uses methods from UserFactory and ImageFactory while also slightly
+ * modifying the output for the desired result.
  *
- * @author (your name)
- * @version (a version number or a date)
+ * @author Joseph Collins
+ *         Nurul Haque
+ *         Jonathan Koenig
  */
 public class Backend
 {
-    // instance variables - replace the example below with your own
-    private UserFactory userFactory;
+    /**
+     * addUser calls UserFactory.addRecord to add the given user to the database.
+     * 
+     * @param   username The user to be added to the database.
+     *          password The password for the user.
+     *          
+     * @return boolean. If true, the user was successfully added.
+     */
+    public static boolean addUser (String username, String password) {
+        return UserFactory.addRecord(username, password);
+    }
 
     /**
-     * Constructor for objects of class Backend
+     * isPasswordValid checks if the given password is correctly formatted
+     * 
+     * This includes being less than 50 characters long, not having
+     * any spaces, and not having more than 5 numbers.
+     * 
+     * @param   password The password that needs to be checked.
+     *                   This is already assumed to not be empty.
+     *                      
+     * @return  boolean - If true, the password is valid.
      */
-    public Backend()
-    {
-        userFactory = new UserFactory();
-    }
-
-    public static void addUser (String username, String password) {
-        UserFactory.addRecord(username, password);
-    }
-
     public static boolean isPasswordValid(String password) {
         if (password.length() > 50) { 
             return false;
         } else {    
             char c;
             int count = 1; 
-            for (int i = 0; i < password.length() - 1; i++) {
+            for (int i = 0; i < password.length(); i++) {
                 c = password.charAt(i);
-                if (!Character.isLetterOrDigit(c)) {        
+                // If the character is a space
+                if (c == ' '){        
                     return false;
-                } else if (Character.isDigit(c)) {
+                }
+                else if (Character.isDigit(c)) {
                     count++;
-                    if (count < 6)  {   
+                    if (count > 6)  {   
                         return false;
                     }   
                 }
@@ -44,19 +59,36 @@ public class Backend
         return true;
     }
     
+    /**
+     * isUsernameValid checks if the given username is correctly formatted
+     * 
+     * This includes being less than 50 characters long, not having
+     * any spaces, not having more than 5 numbers, and only having
+     * letters and numbers.
+     * 
+     * @param   username The username that needs to be checked.
+     *                   This is already assumed to not be empty.
+     *          
+     * @return  boolean - If true, the username is valid.
+     */
     public static boolean isUsernameValid(String username) {
         if (username.length() > 50) { 
             return false;
         } else {    
             char c;
             int count = 1; 
-            for (int i = 0; i < username.length() - 1; i++) {
+            for (int i = 0; i < username.length(); i++) {
                 c = username.charAt(i);
                 if (!Character.isLetterOrDigit(c)) {        
                     return false;
-                } else if (Character.isDigit(c)) {
+                }
+                // If the character is a space
+                else if (c == ' '){        
+                    return false;
+                }
+                else if (Character.isDigit(c)) {
                     count++;
-                    if (count < 6)  {   
+                    if (count > 6)  {   
                         return false;
                     }   
                 }
@@ -65,10 +97,28 @@ public class Backend
         return true;
     }
     
+    /**
+     * moveImage calls the ImageFactory.moveImage method. This is used
+     * to upload an image for a user.
+     * 
+     * @param   filepath The filepath to the image that should be moved.
+     *          username The user that is uploading the image. The file
+     *                   is moved to the folder of this user.
+     * 
+     * @return String of a formatted file path for the image's new location.
+     */
     public static String moveImage(String filepath, String username) {
         return ImageFactory.moveImage(filepath, username);
     }
     
+    /**
+     * getUserImages calls ImageFactory.getFilePaths to get all the images
+     * in username's folder and return a String array of their locations.
+     * 
+     * @param   username The user that the images are associated with.
+     * 
+     * @return String[] of formatted file paths for each image.
+     */
     public static String[] getUserImages(String username) {
         File[] userFiles = ImageFactory.getFilePaths(username);
         
