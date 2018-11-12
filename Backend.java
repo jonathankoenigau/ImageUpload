@@ -97,6 +97,29 @@ public class Backend
         return true;
     }
     
+    
+
+public void checkFile() {
+    Scanner scan = new Scanner (new File("UserFactory"));
+    Scanner keyboard = new Scanner (System.in);
+    String inpUser = keyboard.nextLine();
+    String inpPass = keyboard.nextLine();
+    
+    while (scanner.hasNextLine()) {
+    String user = scan.nextLine();
+    String pass = scan.nextLine();
+
+	if (inpUser.equals(user) && inpPass.equals(pass)) {
+        	System.out.print("Login Successful");
+    	} 
+	else if (scanner.hasNextLine != true {
+        	System.out.print("Error Message");
+    }
+   }
+}
+
+    
+    
     /**
      * moveImage calls the ImageFactory.moveImage method. This is used
      * to upload an image for a user.
