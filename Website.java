@@ -210,7 +210,6 @@ public class Website extends Application
         Label usernameLabel = new Label("Username: ");
 
         TextField usernameField = new TextField();
-        root.getChildren().add(usernameField);
 
         usernameRow.getChildren().addAll(usernameLabel, usernameField);
         root.getChildren().add(usernameRow);
@@ -223,7 +222,6 @@ public class Website extends Application
         Label passwordLabel = new Label("Password: ");
 
         TextField passwordField = new TextField();
-        root.getChildren().add(passwordField);
 
         passwordRow.getChildren().addAll(passwordLabel, passwordField);
         root.getChildren().add(passwordRow);
@@ -295,6 +293,18 @@ public class Website extends Application
         );
 
         root.getChildren().add(fileButton);
+        
+        // Tag Row
+        HBox tagRow = new HBox();
+        tagRow.setPadding( new Insets(16) );
+        tagRow.setSpacing(16);
+
+        Label tagLabel = new Label("Tags: ");
+
+        TextField tagField = new TextField();
+
+        tagRow.getChildren().addAll(tagLabel, tagField);
+        root.getChildren().add(tagRow);
 
         Button uploadButton = new Button("Upload");
         uploadButton.setOnAction(
@@ -534,6 +544,22 @@ public class Website extends Application
             // Add Button
             headerRow.getChildren().add(uploadImageButton);
         }
+        
+        // Search Field
+        TextField searchField = new TextField();
+        headerRow.getChildren().add(searchField);
+        
+        // Search Button
+        Button searchButton = new Button("\uD83D\uDD0D");
+        // Button OnClick
+        searchButton.setOnAction(
+            (ActionEvent event) ->
+            {
+                
+            }
+        );
+        // Add Button
+        headerRow.getChildren().add(searchButton);
 
         // If a user isn't logged in
         if(currentUser == null)
