@@ -354,7 +354,30 @@ public class Website extends Application
         mainStage.setScene(mainScene);
 
         // Website Elements
-
+        
+        // If the image was uploaded by the logged in user, add a delete button
+        
+        if(currentUser.equals(userString))
+        {
+            Button deleteButton = new Button("Delete Image");
+            deleteButton.setOnAction(
+                (ActionEvent event) ->
+                {
+                    // Ask if the user really wants to delete the image
+                    Alert alert = new Alert(AlertType.CONFIRMATION);
+                    alert.setTitle("Warning!");
+                    alert.setHeaderText("Delete Image");
+                    alert.setContentText("Are you sure you want to delete this image?");
+                    Optional<ButtonType> result = alert.showAndWait();
+                    // If the user presses OK
+                    if (result.isPresent() && result.get() == ButtonType.OK) {
+                        Backend.deleteImage(imagePath);
+                        userPage(mainStage, userString);
+                    }
+                }
+            );
+        }
+        
         ImageView image = new ImageView();
         image.setImage(new Image(imagePath));
         root.getChildren().add(image);
@@ -401,8 +424,6 @@ public class Website extends Application
         Label userHeaderLabel = new Label(userString);
         root.getChildren().add(userHeaderLabel);
 
-        // Have a check to see if the user actually exists
-
         // If the user exists
         // Use a for loop to show all the images this user uploaded
         String[] userImages = Backend.getUserImages(userString);
@@ -432,6 +453,71 @@ public class Website extends Application
         // If the user doesn't exist
         // Show some text saying the user doesn't exist
     }
+    
+    /**
+     * This method set up the scene for a search page.
+     * 
+     * @param mainStage This is where the scene is placed.
+     * @param searchTags These are the tags that the user searched.
+     * The images displayed are ones that include one of those tags.
+     */
+    public void searchPage (Stage mainStage, String[] searchTags)
+    {
+        mainStage.setTitle("Search");
+
+        // Initial Setup
+        ScrollPane scroll = basicSetup(mainStage);
+        VBox root = (VBox) scroll.getContent();
+
+        Scene mainScene = new Scene(scroll, width, height);
+        mainStage.setScene(mainScene);
+
+        // Website Elements
+        
+        // Maybe make the search bar keep the tags that was searched for?
+        
+        Label searchHeaderLabel = new Label();
+        root.getChildren().add(searchHeaderLabel);
+        
+        String searchName = "Search: ";
+        
+        for (String tag : searchTags)
+        {
+            searchName += tag;
+            
+            // If this isn't the last tag
+            if(!(tag == searchTags[searchTags.length - 1]))
+                searchName += ", ";
+        }
+        
+        searchHeaderLabel.setText(searchName);
+
+        // Get all matching images
+        String[] searchImages = Backend.searchForImages(searchTags);
+        int image = 0;
+        // Loop for rows
+        // Source for method for rounding up:
+        // https://stackoverflow.com/a/4540700
+        for(int i = 0; i < (int) Math.ceil(searchImages.length / 4.0); i++)
+        {
+            // Loop for each image
+            HBox row = new HBox();
+            row.setPadding( new Insets(16) );
+            row.setSpacing(16);
+
+            for(int j = 0; j < 4; j++)
+            {
+                if(!(image >= searchImages.length))
+                {
+                    // TODO: Get user from image file
+                    row.getChildren().add(clickableImage(mainStage, searchImages[image], userString));
+                    image++;
+                }
+            }
+            
+            root.getChildren().add(row);
+        }
+    }
 
     /**
      * clickableImage - Sets up an ImageView of a 200x200 image that can be
@@ -439,9 +525,9 @@ public class Website extends Application
      * 
      * @param mainStage This is where the ImageView is shown.
      * 
-     *        imageURL This is the url to the image file
+     * @param imageURL This is the url to the image file
      * 
-     *        userString This is the user that uploaded the image. This should
+     * @param userString This is the user that uploaded the image. This should
      *        be found automatically in the future
      *        
      * @return ImageView An ImageView with the image in a 200x200 box that
@@ -555,7 +641,25 @@ public class Website extends Application
         searchButton.setOnAction(
             (ActionEvent event) ->
             {
+                // Check if searchField isn't empty
                 
+                // First check if not actually empty
+                if(!searchField.getText().equals(""))
+                {
+                    // Check if it's just spaces
+                    boolean notEmpty = false;
+                    String[] tags = searchField.getText().split(" ");
+                    
+                    for(String tag : tags)
+                    {
+                        // If there is a tag that isn't a space, it's not empty
+                        if(!searchField.getText().equals(""))
+                            notEmpty = true;
+                    }
+                    
+                    if(notEmpty)
+                        searchPage(mainStage, tags);
+                }
             }
         );
         // Add Button
