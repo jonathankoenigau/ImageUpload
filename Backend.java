@@ -151,8 +151,8 @@ public class Backend
      * 
      * @return String of a formatted file path for the image's new location.
      */
-    public static String moveImage(String filepath, String username) {
-        return ImageFactory.moveImage(filepath, username);
+    public static String moveImage(String filepath, String username, String[] tags) {
+        return ImageFactory.moveImage(filepath, username, tags);
     }
 
     /**

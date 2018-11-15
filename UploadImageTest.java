@@ -1,5 +1,4 @@
 import java.io.File; 
-
 import static org.junit.Assert.*;
 import org.junit.After;
 import org.junit.Before;
@@ -59,7 +58,7 @@ public class UploadImageTest
         // doesn't need to be tested
         
         // Move image
-        ImageFactory.moveImage(image.getPath(),username);
+        ImageFactory.moveImage(image.getPath(),username, new String[]{"test"});
         
         // Get image from folder
         File[] userFiles = ImageFactory.getFilePaths(username);

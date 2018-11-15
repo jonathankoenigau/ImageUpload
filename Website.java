@@ -310,20 +310,11 @@ public class Website extends Application
         uploadButton.setOnAction(
             (ActionEvent event) ->
             {
-                // A method to check if the file can be uploaded
-                // (ex. If the file exists, if the file is too large)
-                // and then uploads the file.
-                // Return a boolean so this method knows if the file
-                // successfully uploaded or not.
-
-                // If it uploaded, go to the page where the image was uploaded.
-                // This should go to the copied image in the user's folder
+                // If a file was chosen to upload
                 if(!fileLabel.getText().equals("None"))
                 {
-                    // This method doesn't work with a full file path,
-                    // so for now just use a test image.
-                    // imagePage(mainStage, fileLabel.getText(), username);
-                    String imagePath = Backend.moveImage(fileLabel.getText(), currentUser);
+                    String[] tags = tagField.getText().split(" ");
+                    String imagePath = Backend.moveImage(fileLabel.getText(), currentUser, tags);
                     imagePage(mainStage, imagePath, currentUser);
                 }
             }
@@ -356,7 +347,6 @@ public class Website extends Application
         // Website Elements
         
         // If the image was uploaded by the logged in user, add a delete button
-        
         if(currentUser.equals(userString))
         {
             Button deleteButton = new Button("Delete Image");
@@ -371,11 +361,12 @@ public class Website extends Application
                     Optional<ButtonType> result = alert.showAndWait();
                     // If the user presses OK
                     if (result.isPresent() && result.get() == ButtonType.OK) {
-                        Backend.deleteImage(imagePath);
+                        //Backend.deleteImage(imagePath);
                         userPage(mainStage, userString);
                     }
                 }
             );
+            root.getChildren().add(deleteButton);
         }
         
         ImageView image = new ImageView();
@@ -492,6 +483,7 @@ public class Website extends Application
         
         searchHeaderLabel.setText(searchName);
 
+        /**
         // Get all matching images
         String[] searchImages = Backend.searchForImages(searchTags);
         int image = 0;
@@ -517,6 +509,7 @@ public class Website extends Application
             
             root.getChildren().add(row);
         }
+        */
     }
 
     /**
@@ -657,8 +650,8 @@ public class Website extends Application
                             notEmpty = true;
                     }
                     
-                    if(notEmpty)
-                        searchPage(mainStage, tags);
+                    //if(notEmpty)
+                        //searchPage(mainStage, tags);
                 }
             }
         );

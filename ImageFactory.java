@@ -2,15 +2,18 @@ import java.io.File;
 import java.util.Scanner;
 import static java.nio.file.StandardCopyOption.*;
 import java.nio.*;
+import java.io.IOException;
+import java.io.FileWriter;
+import java.io.BufferedWriter;
 
 /**
-* ImageFactory contains all methods associated with images.
-* 
-* It is used to move images to users' directories and return image
-* paths for displaying them.
-* 
-* @author   Nurul Haque
-*/
+ * ImageFactory contains all methods associated with images.
+ * 
+ * It is used to move images to users' directories and return image
+ * paths for displaying them.
+ * 
+ * @author   Nurul Haque
+ */
 class ImageFactory
 { 
     /**
@@ -24,7 +27,7 @@ class ImageFactory
      * 
      * @return String of a formatted file path for the image's new location.
      */
-    public static String moveImage(String filePath, String username) { 
+    public static String moveImage(String filePath, String username, String[] tags) { 
         //pass the filename or directory name to File object 
         File f = new File(filePath); 
 
@@ -54,7 +57,7 @@ class ImageFactory
             System.out.println("Absolute path:" +f2.getAbsolutePath()); 
             System.out.println("Parent:"+f2.getParent()); 
             System.out.println("Exists :"+f2.exists()); 
-            
+
             // If file exists and is less than 20mb
             if(f.exists() && f.length() < 2e+7) 
             { 
@@ -70,24 +73,66 @@ class ImageFactory
 
                 if (oldFile.renameTo(newFile)) {
                     System.out.println("The file was moved succesfully.");
+
+                    // After the file is moved successfully, create a file for its tags
+                    addTagsForImage(newFile, tags);
+
                     // This specific URL was found here:
                     // https://stackoverflow.com/a/8088561
                     return newFile.toURI().toString();
                 }
-                 {
+                else {
                     System.out.println("The file was not moved.");
                     return "error.png";
                 }
-
             } 
             else {
-                    System.out.println("The file was not moved.");
-                    return "error.png";
+                System.out.println("The file was not moved.");
+                return "error.png";
             }
         } 
-        
+
         return "error.png";
     } 
+
+    public static void addTagsForImage(File imageFile, String[] tags)
+    {
+        String imageTagsFileName = imageFile.getAbsolutePath();
+        imageTagsFileName = imageTagsFileName.substring(0, imageTagsFileName.lastIndexOf('.')) + ".txt";
+        System.out.println(imageTagsFileName);
+        
+        try{
+            File imageTagsFile =new File(imageTagsFileName);
+
+            /* This logic is to create the file if the
+             * file is not already present
+             */
+            if(!imageTagsFile.exists()){
+                imageTagsFile.createNewFile();
+                System.out.println("New tag file created");
+            }
+
+            //Here true is to append the content to file
+            FileWriter fw = new FileWriter(imageTagsFile,true);
+            //BufferedWriter writer give better performance
+            BufferedWriter bw = new BufferedWriter(fw);
+            
+            for (String tag : tags){
+                bw.write(tag);
+                //Makes new line for the next tag if not the last tag
+                if(!tag.equals(tags[tags.length - 1]))
+                    bw.newLine();
+            }
+            
+            //Closing BufferedWriter Stream
+            bw.close();
+            System.out.println("Image successfully tagged.");
+
+        }catch(IOException ioe){
+            System.out.println("Exception occurred:");
+            ioe.printStackTrace();
+        }
+    }
 
     /**
      * getUserImages gets all the images in username's folder and returns
@@ -121,7 +166,7 @@ class ImageFactory
                 } 
             }
         }
-        
+
         return listOfFiles;
     }
 } 
