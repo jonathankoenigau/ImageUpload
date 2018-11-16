@@ -80,6 +80,13 @@ public class UploadImageTest
         File[] userFiles = ImageFactory.getFilePaths(username);
         userFiles[0].renameTo(image);
         
+        // Delete tag file
+        String imageTagsFileName = userFiles[0].getAbsolutePath();
+        imageTagsFileName = imageTagsFileName.substring(0, imageTagsFileName.lastIndexOf('.')) + ".txt";
+        
+        File tagFile = new File(imageTagsFileName);
+        tagFile.delete();
+        
         // Remove Directory if empty
         File folder = new File(username);
         folder.delete();
