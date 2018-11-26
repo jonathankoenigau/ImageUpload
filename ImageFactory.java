@@ -1,7 +1,11 @@
 import java.io.File; 
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Scanner;
 import static java.nio.file.StandardCopyOption.*;
 import java.nio.*;
+import java.nio.file.NoSuchFileException;
+import java.nio.file.DirectoryNotEmptyException;
 import java.io.IOException;
 import java.io.FileWriter;
 import java.io.BufferedWriter;
@@ -168,5 +172,33 @@ class ImageFactory
         }
 
         return listOfFiles;
+    }
+    
+    public static void deleteImage(String image) 
+    { 
+        File imageFile = new File(image);
+        String imageTagsFileName = imageFile.getAbsolutePath();
+        imageTagsFileName = imageTagsFileName.substring(0, imageTagsFileName.lastIndexOf('.')) + ".txt";
+        try
+        { 
+            if(Files.deleteIfExists(Paths.get(image)))
+                System.out.println("Deletion successful."); 
+            if(Files.deleteIfExists(Paths.get(imageTagsFileName)))
+                System.out.println("Deletion successful."); 
+            
+        } 
+        catch(NoSuchFileException e) 
+        { 
+            System.out.println("No such file/directory exists"); 
+        } 
+        catch(DirectoryNotEmptyException e) 
+        { 
+            System.out.println("Directory is not empty."); 
+        } 
+        catch(IOException e) 
+        { 
+            System.out.println("Invalid permissions."); 
+        } 
+
     }
 } 

@@ -361,7 +361,7 @@ public class Website extends Application
                     Optional<ButtonType> result = alert.showAndWait();
                     // If the user presses OK
                     if (result.isPresent() && result.get() == ButtonType.OK) {
-                        //Backend.deleteImage(imagePath);
+                        Backend.deleteImage(imagePath.substring(6, imagePath.length()));
                         userPage(mainStage, userString);
                     }
                 }
