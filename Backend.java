@@ -172,5 +172,34 @@ public class Backend
         }
 
         return userImageURLs;
+ 
+ 
+    }
+
+ public static void deleteImage(String image) 
+    { 
+        String imageTagsFileName = imageFile.getAbsolutePath();
+        imageTagsFileName = imageTagsFileName.substring(0, imageTagsFileName.lastIndexOf('.')) + ".txt";
+        try
+        { 
+            Files.deleteIfExists(Paths.get(image))
+            Files.deleteIfExists(Paths.get(imageTagsFileName));
+            
+        } 
+        catch(NoSuchFileException e) 
+        { 
+            System.out.println("No such file/directory exists"); 
+        } 
+        catch(DirectoryNotEmptyException e) 
+        { 
+            System.out.println("Directory is not empty."); 
+        } 
+        catch(IOException e) 
+        { 
+            System.out.println("Invalid permissions."); 
+        } 
+          
+        System.out.println("Deletion successful."); 
+
     }
 }
