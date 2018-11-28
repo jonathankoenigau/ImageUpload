@@ -315,7 +315,7 @@ public class Website extends Application
                 {
                     String[] tags = tagField.getText().split(" ");
                     String imagePath = Backend.moveImage(fileLabel.getText(), currentUser, tags);
-                    imagePage(mainStage, imagePath, currentUser);
+                    imagePage(mainStage, imagePath);
                 }
             }
         );
@@ -333,7 +333,7 @@ public class Website extends Application
      * @param userString This is the user that uploaded the image.
      * This can be changed if the user can be obtained from the path.
      */
-    public void imagePage (Stage mainStage, String imagePath, String userString)
+    public void imagePage (Stage mainStage, String imagePath)
     {
         mainStage.setTitle("Image");
 
@@ -345,6 +345,9 @@ public class Website extends Application
         mainStage.setScene(mainScene);
 
         // Website Elements
+        
+        // User who uploaded image
+        String userString = Backend.getUserFromImage(imagePath);
         
         // If the image was uploaded by the logged in user, add a delete button
         if(currentUser.equals(userString))
@@ -380,7 +383,7 @@ public class Website extends Application
 
         Label uploadedByLabel = new Label("Uploaded By: ");
         uploadedByRow.getChildren().add(uploadedByLabel);
-
+        
         Button uploadedByButton = new Button(userString);
         uploadedByButton.setOnAction(
             (ActionEvent event) ->
@@ -433,7 +436,7 @@ public class Website extends Application
             {
                 if(!(image >= userImages.length))
                 {
-                    row.getChildren().add(clickableImage(mainStage, userImages[image], userString));
+                    row.getChildren().add(clickableImage(mainStage, userImages[image]));
                     image++;
                 }
             }
@@ -526,7 +529,7 @@ public class Website extends Application
      * @return ImageView An ImageView with the image in a 200x200 box that
      *         links to the image page for this image.
      */
-    public ImageView clickableImage (Stage mainStage, String imageURL, String userString)
+    public ImageView clickableImage (Stage mainStage, String imageURL)
     {   
         ImageView image = new ImageView();
         image.setImage(new Image(imageURL));
@@ -543,7 +546,7 @@ public class Website extends Application
 
             @Override
             public void handle(MouseEvent event) {
-                imagePage(mainStage, imageURL, userString);
+                imagePage(mainStage, imageURL);
                 event.consume();
             }
         });

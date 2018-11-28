@@ -172,11 +172,20 @@ public class Backend
         }
 
         return userImageURLs;
- 
- 
     }
 
     public static void deleteImage(String imagePath) {
         ImageFactory.deleteImage(imagePath);
+    }
+    
+    public static String getUserFromImage(String imagePath) {
+        // Get the last two indexes of "\"
+        int lastIndex = imagePath.lastIndexOf("/");
+        int secondLastIndex = imagePath.lastIndexOf("/", lastIndex - 1);
+        
+        System.out.println(lastIndex);
+        System.out.println(secondLastIndex);
+        System.out.println(imagePath.substring(secondLastIndex + 1, lastIndex));
+        return imagePath.substring(secondLastIndex + 1, lastIndex);
     }
 }
