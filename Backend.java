@@ -173,6 +173,26 @@ public class Backend
 
         return userImageURLs;
     }
+    
+    /**
+     * getFollowerImages calls ImageFactory.getFollowerFilePaths to get all 
+     * the images from the users username is following and return a 
+     * String array of their locations.
+     * 
+     * @param   username The user that is requesting their follower's images.
+     * 
+     * @return String[] of formatted file paths for each image.
+     */
+    public static String[] getFollowerImages(String username) {
+        File[] followFiles = ImageFactory.getFollowerFilePaths(username);
+
+        String[] followImageURLs = new String[followFiles.length];
+        for(int i = 0; i < followFiles.length; i++) {
+            followImageURLs[i] = followFiles[i].toURI().toString();
+        }
+
+        return followImageURLs;
+    }
 
     public static void deleteImage(String imagePath) {
         ImageFactory.deleteImage(imagePath);
@@ -187,5 +207,9 @@ public class Backend
         System.out.println(secondLastIndex);
         System.out.println(imagePath.substring(secondLastIndex + 1, lastIndex));
         return imagePath.substring(secondLastIndex + 1, lastIndex);
+    }
+    
+    public static boolean addFollower(String currentUser, String userToFollow) {
+        return UserFactory.addFollower(currentUser, userToFollow);
     }
 }

@@ -1,4 +1,5 @@
 import java.io.File; 
+import java.io.FileFilter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Scanner;
@@ -104,7 +105,7 @@ class ImageFactory
         String imageTagsFileName = imageFile.getAbsolutePath();
         imageTagsFileName = imageTagsFileName.substring(0, imageTagsFileName.lastIndexOf('.')) + ".txt";
         System.out.println(imageTagsFileName);
-        
+
         try{
             File imageTagsFile =new File(imageTagsFileName);
 
@@ -120,14 +121,14 @@ class ImageFactory
             FileWriter fw = new FileWriter(imageTagsFile,true);
             //BufferedWriter writer give better performance
             BufferedWriter bw = new BufferedWriter(fw);
-            
+
             for (String tag : tags){
                 bw.write(tag);
                 //Makes new line for the next tag if not the last tag
                 if(!tag.equals(tags[tags.length - 1]))
                     bw.newLine();
             }
-            
+
             //Closing BufferedWriter Stream
             bw.close();
             System.out.println("Image successfully tagged.");
@@ -153,8 +154,10 @@ class ImageFactory
             System.out.println("Doesn't exist.");
         }
 
+        // Make sure this only returns image files
+        ImageFilter filter = new ImageFilter();
         //File folder = new File("/Users/nurulhaque/CreatUser/userA");
-        File[] listOfFiles = folder.listFiles();
+        File[] listOfFiles = folder.listFiles(filter);
 
         int size = listOfFiles.length;
         System.out.println("Number of files: " + size);
@@ -173,7 +176,7 @@ class ImageFactory
 
         return listOfFiles;
     }
-    
+
     public static void deleteImage(String image) 
     { 
         File imageFile = new File(image);
@@ -185,7 +188,7 @@ class ImageFactory
                 System.out.println("Deletion successful."); 
             if(Files.deleteIfExists(Paths.get(imageTagsFileName)))
                 System.out.println("Deletion successful."); 
-            
+
         } 
         catch(NoSuchFileException e) 
         { 
@@ -201,4 +204,67 @@ class ImageFactory
         } 
 
     }
+
+    public static File[] getFollowerFilePaths(String username){
+        String fileName = (username + "\\follow.txt");
+
+        try{
+            Scanner scan = new Scanner(new File(fileName));
+
+            File[] listOfFiles = new File[0];
+
+            while (scan.hasNext()){
+                String line = scan.nextLine().toString();
+
+                File[] userListOfFiles = getFilePaths(line);
+                int size = userListOfFiles.length;
+
+                if (size == 0){
+                    System.out.println("Folder is empty.");
+                } else{
+
+                    for (File file : userListOfFiles) {
+                        if (file.isFile()) {
+
+                            System.out.println("Absolute path:" + file.getAbsolutePath());
+                        } 
+                    }
+                }
+
+                // Combine arrays
+                File[] combine = new File[listOfFiles.length + userListOfFiles.length];
+                int i = 0;
+                for (File file : listOfFiles) {
+                    combine[i] = file;
+                    i++;
+                }
+                for (File file : userListOfFiles) {
+                    combine[i] = file;
+                    i++;
+                }
+                
+                listOfFiles = combine;
+            }
+
+            scan.close();
+            return listOfFiles;
+        }catch(Exception e){
+            System.out.println("Error");
+            return new File[]{new File("error.png")};
+        }
+    }
 } 
+
+class ImageFilter implements FileFilter
+{
+    @Override
+    public boolean accept(File pathname) {
+        String filePath = pathname.getAbsolutePath();
+        String fileType = filePath.substring(filePath.lastIndexOf('.') + 1, filePath.length());
+
+        if(fileType.equals("png") || fileType.equals("jpg") || fileType.equals("jpeg"))
+            return true;
+        else
+            return false;
+    }
+}

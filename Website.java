@@ -417,6 +417,20 @@ public class Website extends Application
         // Website Elements
         Label userHeaderLabel = new Label(userString);
         root.getChildren().add(userHeaderLabel);
+        
+        if(currentUser != null && !currentUser.equals(userString))
+        {
+            Button followButton = new Button("Follow");
+            followButton.setOnAction(
+                (ActionEvent event) ->
+                    {
+                        // Returns true if succeeded, returns false if failed
+                        // Maybe do something with that
+                        Backend.addFollower(currentUser, userString);
+                    }
+                );
+            root.getChildren().add(followButton);
+        }
 
         // If the user exists
         // Use a for loop to show all the images this user uploaded
@@ -513,6 +527,57 @@ public class Website extends Application
             root.getChildren().add(row);
         }
         */
+    }
+    
+    /**
+     * This method set up the scene for the user's follow page.
+     * 
+     * @param mainStage This is where the scene is placed.
+     */
+    public void followPage (Stage mainStage)
+    {
+        mainStage.setTitle("Following");
+
+        // Initial Setup
+        ScrollPane scroll = basicSetup(mainStage);
+        VBox root = (VBox) scroll.getContent();
+
+        Scene mainScene = new Scene(scroll, width, height);
+        mainStage.setScene(mainScene);
+
+        // Website Elements
+        Label followHeaderLabel = new Label("Following");
+        root.getChildren().add(followHeaderLabel);
+
+        // If the user is following anyone
+        // Use a for loop to show the images from the users
+        // the current user is following
+        String[] followImages = Backend.getFollowerImages(currentUser);
+        int image = 0;
+        // Loop for rows
+        // Source for method for rounding up:
+        // https://stackoverflow.com/a/4540700
+        for(int i = 0; i < (int) Math.ceil(followImages.length / 4.0); i++)
+        {
+            // Loop for each image
+            HBox row = new HBox();
+            row.setPadding( new Insets(16) );
+            row.setSpacing(16);
+
+            for(int j = 0; j < 4; j++)
+            {
+                if(!(image >= followImages.length))
+                {
+                    row.getChildren().add(clickableImage(mainStage, followImages[image]));
+                    image++;
+                }
+            }
+            
+            root.getChildren().add(row);
+        }
+
+        // If the user isn't following anyone
+        // Show some text saying the user isn't following anyone
     }
 
     /**
@@ -614,6 +679,18 @@ public class Website extends Application
         // If a user is logged in
         if(currentUser != null)
         {
+            // Following Button
+            Button followButton = new Button("Following");
+            // Button OnClick
+            followButton.setOnAction(
+                (ActionEvent event) ->
+                {
+                    followPage(mainStage);
+                }
+            );
+            // Add Button
+            headerRow.getChildren().add(followButton);
+            
             // Upload Image Button
             Button uploadImageButton = new Button("Upload an Image");
             // Button OnClick

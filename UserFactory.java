@@ -28,7 +28,7 @@ public class UserFactory{
         if (!f.exists()){
             f.mkdir();
             System.out.println ("Directory created!");
-            
+
             try{
                 File file =new File("Database.txt");
                 /* This logic is to create the file if the
@@ -38,7 +38,7 @@ public class UserFactory{
                     file.createNewFile();
                     System.out.println("New File database.txt created");
                 }
-    
+
                 //Here true is to append the content to file
                 FileWriter fw = new FileWriter(file,true);
                 //BufferedWriter writer give better performance
@@ -48,11 +48,18 @@ public class UserFactory{
                 bw.newLine();
                 //Closing BufferedWriter Stream
                 bw.close();
-    
+
                 System.out.println("Data successfully appended at the end of file");
-                
+
+                File follow = new File(username + "\\follow.txt");
+
+                if(!follow.exists()){
+                    follow.createNewFile();
+                    System.out.println("New File follow.txt created");
+                }
+
                 return true;
-    
+
             }catch(IOException ioe){
                 System.out.println("Exception occurred:");
                 ioe.printStackTrace();
@@ -61,6 +68,37 @@ public class UserFactory{
         }
         else {
             System.out.println("Username and Directory already exists. Please enter different username.");
+            return false;
+        }
+    }
+
+    public static boolean addFollower(String currentUser, String userToFollow){
+
+        try{
+            File file = new File(currentUser + "\\follow.txt");
+
+            if(!file.exists()){
+                file.createNewFile();
+                System.out.println("New File follow.txt created");
+            }
+
+            //Here true is to append the content to file
+            FileWriter fw = new FileWriter(file,true);
+            //BufferedWriter writer give better performance
+            BufferedWriter bw = new BufferedWriter(fw);
+            bw.write(userToFollow);
+            //Makes new line for the next user
+            bw.newLine();
+            //Closing BufferedWriter Stream
+            bw.close();
+
+            System.out.println("Data successfully appended at the end of file");
+
+            return true;
+
+        }catch(IOException ioe){
+            System.out.println("Exception occurred:");
+            ioe.printStackTrace();
             return false;
         }
     }
