@@ -18,6 +18,7 @@ import java.io.BufferedWriter;
  * paths for displaying them.
  * 
  * @author   Nurul Haque
+ *           Jonathan Koenig
  */
 class ImageFactory
 { 
@@ -98,6 +99,16 @@ class ImageFactory
         return new File("error.png");
     } 
 
+    /**
+     * addTagsForImage uses the tags array to make a tag file for the
+     * provided image file.
+     * 
+     * The tag file is a .txt file with the same name as the given image and
+     * in the same directory as the given image.
+     * 
+     * @param   imageFile The image to add the tag for.
+     *          tags The strings to use ass tags.
+     */
     public static void addTagsForImage(File imageFile, String[] tags)
     {
         String imageTagsFileName = imageFile.getAbsolutePath();
@@ -175,6 +186,12 @@ class ImageFactory
         return listOfFiles;
     }
 
+    /**
+     * deleteImage deletes the given image and its corresponding tag file.
+     * 
+     * @param   imagePath The image file that will be deleted and the name
+     *                    used to delete the same named .txt file.
+     */
     public static void deleteImage(String image) 
     { 
         System.out.println("Test:" + image);
@@ -204,6 +221,14 @@ class ImageFactory
 
     }
 
+    /**
+     * getFollowerFilePaths gets all the images from the users 
+     * that username is following and return a File array of their locations.
+     * 
+     * @param   username The user that is requesting their follower's images.
+     * 
+     * @return File[] of file paths for each image.
+     */
     public static File[] getFollowerFilePaths(String username){
         String fileName = (username + "\\follow.txt");
 
@@ -252,8 +277,37 @@ class ImageFactory
             return new File[]{new File("error.png")};
         }
     }
+    
+    /**
+     * getUserFromImage gets the username of the user who uploaded the
+     * given image.
+     * 
+     * This is done by getting the name of the folder the file is currently in.
+     * 
+     * @param   imagePath The image file used to find the user.
+     * 
+     * @return String of the user's username.
+     */
+    public static String getUserFromImage(String imagePath) {
+        // Get the last two indexes of "\"
+        int lastIndex = imagePath.lastIndexOf("\\");
+        int secondLastIndex = imagePath.lastIndexOf("\\", lastIndex - 1);
+        
+        System.out.println(lastIndex);
+        System.out.println(secondLastIndex);
+        System.out.println(imagePath.substring(secondLastIndex + 1, lastIndex));
+        return imagePath.substring(secondLastIndex + 1, lastIndex);
+    }
 } 
 
+/**
+ * ImageFilter is a class used to filter out what files are returned using
+ * folder.listFiles().
+ * 
+ * This is mainly used to only obtain image files from a user's folder.
+ * 
+ * @author  Jonathan Koenig
+ */
 class ImageFilter implements FileFilter
 {
     @Override

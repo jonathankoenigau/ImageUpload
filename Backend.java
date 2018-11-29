@@ -176,8 +176,8 @@ public class Backend
     
     /**
      * getFollowerImages calls ImageFactory.getFollowerFilePaths to get all 
-     * the images from the users username is following and return a 
-     * String array of their locations.
+     * the images from the users that username is following and return a 
+     * File array of their locations.
      * 
      * @param   username The user that is requesting their follower's images.
      * 
@@ -194,22 +194,26 @@ public class Backend
         return followFiles;
     }
 
-    public static void deleteImage(String imagePath) {
-        File temp = new File(imagePath);
-        ImageFactory.deleteImage(temp.getAbsolutePath());
+    /**
+     * deleteImage calls ImageFactory.deleteImage to delete the given image
+     * and its corresponding tag file.
+     * 
+     * @param   imagePath The image file that will be deleted and the name
+     *                    used to delete the same named .txt file.
+     */
+    public static void deleteImage(File imagePath) {
+        ImageFactory.deleteImage(imagePath.getAbsolutePath());
     }
     
-    public static String getUserFromImage(String imagePath) {
-        // Get the last two indexes of "\"
-        int lastIndex = imagePath.lastIndexOf("\\");
-        int secondLastIndex = imagePath.lastIndexOf("\\", lastIndex - 1);
-        
-        System.out.println(lastIndex);
-        System.out.println(secondLastIndex);
-        System.out.println(imagePath.substring(secondLastIndex + 1, lastIndex));
-        return imagePath.substring(secondLastIndex + 1, lastIndex);
-    }
-    
+    /**
+     * addFollower calls UserFactory.addFollower() to make currentUser
+     * follow userToFollow.
+     * 
+     * @param   currentUser The user current logged in.
+     *          userToFollow The user that will be followed
+     *          
+     * @return Returns true if follower successfully added, returns false if failed.      
+     */
     public static boolean addFollower(String currentUser, String userToFollow) {
         return UserFactory.addFollower(currentUser, userToFollow);
     }

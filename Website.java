@@ -347,7 +347,7 @@ public class Website extends Application
         // Website Elements
         
         // User who uploaded image
-        String userString = Backend.getUserFromImage(imagePath.getAbsolutePath());
+        String userString = ImageFactory.getUserFromImage(imagePath.getAbsolutePath());
         
         // If the image was uploaded by the logged in user, add a delete button
         if(currentUser.equals(userString))
@@ -364,7 +364,7 @@ public class Website extends Application
                     Optional<ButtonType> result = alert.showAndWait();
                     // If the user presses OK
                     if (result.isPresent() && result.get() == ButtonType.OK) {
-                        Backend.deleteImage(imagePath.getAbsolutePath());
+                        Backend.deleteImage(imagePath);
                         userPage(mainStage, userString);
                     }
                 }

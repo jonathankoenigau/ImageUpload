@@ -17,8 +17,9 @@ public class UserFactory{
      * @param   username The user to be added to the database.
      *          password The password for the user.
      *          
-     * @return boolean. If true, the user was successfully added and a
-     * directory for the user was created.
+     * @return boolean. If true, the user was successfully added, a
+     * directory for the user was created, and a follow.txt was added
+     * to that directory.
      */
     public static boolean addRecord (String username, String password) {
         String input = username + " " + password;
@@ -72,6 +73,16 @@ public class UserFactory{
         }
     }
 
+    /**
+     * addFollower makes currentUser follow userToFollow.
+     * 
+     * This writes userToFollow into currentUser's follow.txt.
+     * 
+     * @param   currentUser The user current logged in.
+     *          userToFollow The user that will be followed
+     *          
+     * @return Returns true if follower successfully added, returns false if failed.      
+     */
     public static boolean addFollower(String currentUser, String userToFollow){
 
         try{

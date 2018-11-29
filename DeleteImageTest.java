@@ -7,10 +7,10 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * The test class DeleteImageTest.
+ * This class tests the delete image feature and if it
+ * correctly deletes the image and tag file.
  *
- * @author  (your name)
- * @version (a version number or a date)
+ * @author  Jonathan Koenig
  */
 public class DeleteImageTest
 {
@@ -70,7 +70,7 @@ public class DeleteImageTest
         
         // Delete image
         // The first index of beforeDelete is the uploaded image
-        Backend.deleteImage(testFilePath.getAbsolutePath());
+        Backend.deleteImage(testFilePath);
         
         // Results from searching in user folder after delete
         File[] afterDelete = Backend.getUserImages(username);
