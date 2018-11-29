@@ -15,7 +15,7 @@ import org.junit.Test;
 public class DeleteImageTest
 {
     String username;
-    String testFilePath;
+    File testFilePath;
     
     /**
      * Sets up the test fixture.
@@ -26,7 +26,7 @@ public class DeleteImageTest
     public void setUp()
     {
         // Create user and folder
-        username = "ImageUploadTest";
+        username = "ImageDeleteTest";
         File folder = new File(username);
         
         int loopNum = 1;
@@ -63,22 +63,21 @@ public class DeleteImageTest
     public void deleteImage()
     {
         // Results from searching in user folder before delete
-        String[] beforeDelete = Backend.getUserImages(username);
+        File[] beforeDelete = Backend.getUserImages(username);
         
-        // Check if there is 1 file in the user's folder
-        assertEquals(beforeDelete.length, 1);
+        // Check if there is a file
+        assertEquals(1, beforeDelete.length);
         
         // Delete image
         // The first index of beforeDelete is the uploaded image
-        Backend.deleteImage(testFilePath.substring(6, testFilePath.length()));
+        Backend.deleteImage(testFilePath.getAbsolutePath());
         
         // Results from searching in user folder after delete
-        String[] afterDelete = Backend.getUserImages(username);
+        File[] afterDelete = Backend.getUserImages(username);
         
-        // Check if there are 0 files in the user's folder
-        assertEquals(afterDelete.length, 0);
+        // Check if there isn't a file
+        assertEquals(0, afterDelete.length);
     }
-    
 
     /**
      * Tears down the test fixture.
@@ -88,14 +87,6 @@ public class DeleteImageTest
     @After
     public void tearDown()
     {
-        // Delete tag file
-        File[] userFiles = ImageFactory.getFilePaths(username);
-        String imageTagsFileName = userFiles[0].getAbsolutePath();
-        imageTagsFileName = imageTagsFileName.substring(0, imageTagsFileName.lastIndexOf('.')) + ".txt";
-        
-        File tagFile = new File(imageTagsFileName);
-        tagFile.delete();
-        
         // Remove Directory if empty
         File folder = new File(username);
         folder.delete();

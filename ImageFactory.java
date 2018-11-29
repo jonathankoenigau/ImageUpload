@@ -30,9 +30,9 @@ class ImageFactory
      *          username The user that is uploading the image. The file
      *                   is moved to the folder of this user.
      * 
-     * @return String of a formatted file path for the image's new location.
+     * @return File for the image's new location.
      */
-    public static String moveImage(String filePath, String username, String[] tags) { 
+    public static File moveImage(String filePath, String username, String[] tags) { 
         //pass the filename or directory name to File object 
         File f = new File(filePath); 
 
@@ -81,23 +81,21 @@ class ImageFactory
 
                     // After the file is moved successfully, create a file for its tags
                     addTagsForImage(newFile, tags);
-
-                    // This specific URL was found here:
-                    // https://stackoverflow.com/a/8088561
-                    return newFile.toURI().toString();
+                    return newFile;
+                    //return newFile.toURI().toString();
                 }
                 else {
                     System.out.println("The file was not moved.");
-                    return "error.png";
+                    return new File("error.png");
                 }
             } 
             else {
                 System.out.println("The file was not moved.");
-                return "error.png";
+                return new File("error.png");
             }
         } 
 
-        return "error.png";
+        return new File("error.png");
     } 
 
     public static void addTagsForImage(File imageFile, String[] tags)
@@ -179,6 +177,7 @@ class ImageFactory
 
     public static void deleteImage(String image) 
     { 
+        System.out.println("Test:" + image);
         File imageFile = new File(image);
         String imageTagsFileName = imageFile.getAbsolutePath();
         imageTagsFileName = imageTagsFileName.substring(0, imageTagsFileName.lastIndexOf('.')) + ".txt";

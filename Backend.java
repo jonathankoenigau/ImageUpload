@@ -149,9 +149,9 @@ public class Backend
      *          username The user that is uploading the image. The file
      *                   is moved to the folder of this user.
      * 
-     * @return String of a formatted file path for the image's new location.
+     * @return File for the image's new location.
      */
-    public static String moveImage(String filepath, String username, String[] tags) {
+    public static File moveImage(String filepath, String username, String[] tags) {
         return ImageFactory.moveImage(filepath, username, tags);
     }
 
@@ -161,9 +161,9 @@ public class Backend
      * 
      * @param   username The user that the images are associated with.
      * 
-     * @return String[] of formatted file paths for each image.
+     * @return File[] of file paths for each image.
      */
-    public static String[] getUserImages(String username) {
+    public static File[] getUserImages(String username) {
         File[] userFiles = ImageFactory.getFilePaths(username);
 
         String[] userImageURLs = new String[userFiles.length];
@@ -171,7 +171,7 @@ public class Backend
             userImageURLs[i] = userFiles[i].toURI().toString();
         }
 
-        return userImageURLs;
+        return userFiles;
     }
     
     /**
@@ -181,9 +181,9 @@ public class Backend
      * 
      * @param   username The user that is requesting their follower's images.
      * 
-     * @return String[] of formatted file paths for each image.
+     * @return File[] of file paths for each image.
      */
-    public static String[] getFollowerImages(String username) {
+    public static File[] getFollowerImages(String username) {
         File[] followFiles = ImageFactory.getFollowerFilePaths(username);
 
         String[] followImageURLs = new String[followFiles.length];
@@ -191,17 +191,18 @@ public class Backend
             followImageURLs[i] = followFiles[i].toURI().toString();
         }
 
-        return followImageURLs;
+        return followFiles;
     }
 
     public static void deleteImage(String imagePath) {
-        ImageFactory.deleteImage(imagePath);
+        File temp = new File(imagePath);
+        ImageFactory.deleteImage(temp.getAbsolutePath());
     }
     
     public static String getUserFromImage(String imagePath) {
         // Get the last two indexes of "\"
-        int lastIndex = imagePath.lastIndexOf("/");
-        int secondLastIndex = imagePath.lastIndexOf("/", lastIndex - 1);
+        int lastIndex = imagePath.lastIndexOf("\\");
+        int secondLastIndex = imagePath.lastIndexOf("\\", lastIndex - 1);
         
         System.out.println(lastIndex);
         System.out.println(secondLastIndex);

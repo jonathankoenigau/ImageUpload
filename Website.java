@@ -314,7 +314,7 @@ public class Website extends Application
                 if(!fileLabel.getText().equals("None"))
                 {
                     String[] tags = tagField.getText().split(" ");
-                    String imagePath = Backend.moveImage(fileLabel.getText(), currentUser, tags);
+                    File imagePath = Backend.moveImage(fileLabel.getText(), currentUser, tags);
                     imagePage(mainStage, imagePath);
                 }
             }
@@ -333,7 +333,7 @@ public class Website extends Application
      * @param userString This is the user that uploaded the image.
      * This can be changed if the user can be obtained from the path.
      */
-    public void imagePage (Stage mainStage, String imagePath)
+    public void imagePage (Stage mainStage, File imagePath)
     {
         mainStage.setTitle("Image");
 
@@ -347,7 +347,7 @@ public class Website extends Application
         // Website Elements
         
         // User who uploaded image
-        String userString = Backend.getUserFromImage(imagePath);
+        String userString = Backend.getUserFromImage(imagePath.getAbsolutePath());
         
         // If the image was uploaded by the logged in user, add a delete button
         if(currentUser.equals(userString))
@@ -364,7 +364,7 @@ public class Website extends Application
                     Optional<ButtonType> result = alert.showAndWait();
                     // If the user presses OK
                     if (result.isPresent() && result.get() == ButtonType.OK) {
-                        Backend.deleteImage(imagePath.substring(6, imagePath.length()));
+                        Backend.deleteImage(imagePath.getAbsolutePath());
                         userPage(mainStage, userString);
                     }
                 }
@@ -373,7 +373,9 @@ public class Website extends Application
         }
         
         ImageView image = new ImageView();
-        image.setImage(new Image(imagePath));
+        // This specific URL was found here:
+        // https://stackoverflow.com/a/8088561
+        image.setImage(new Image(imagePath.toURI().toString()));
         root.getChildren().add(image);
 
         // Uploaded By Row
@@ -434,7 +436,7 @@ public class Website extends Application
 
         // If the user exists
         // Use a for loop to show all the images this user uploaded
-        String[] userImages = Backend.getUserImages(userString);
+        File[] userImages = Backend.getUserImages(userString);
         int image = 0;
         // Loop for rows
         // Source for method for rounding up:
@@ -552,7 +554,7 @@ public class Website extends Application
         // If the user is following anyone
         // Use a for loop to show the images from the users
         // the current user is following
-        String[] followImages = Backend.getFollowerImages(currentUser);
+        File[] followImages = Backend.getFollowerImages(currentUser);
         int image = 0;
         // Loop for rows
         // Source for method for rounding up:
@@ -594,10 +596,12 @@ public class Website extends Application
      * @return ImageView An ImageView with the image in a 200x200 box that
      *         links to the image page for this image.
      */
-    public ImageView clickableImage (Stage mainStage, String imageURL)
+    public ImageView clickableImage (Stage mainStage, File imagePath)
     {   
         ImageView image = new ImageView();
-        image.setImage(new Image(imageURL));
+        // This specific URL was found here:
+        // https://stackoverflow.com/a/8088561
+        image.setImage(new Image(imagePath.toURI().toString()));
         image.setPreserveRatio(false);
         image.setFitWidth(200);
         image.setFitHeight(200);
@@ -608,10 +612,10 @@ public class Website extends Application
         // Source for making an image clickable:
         // https://stackoverflow.com/a/25554726
         image.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-
+            
             @Override
             public void handle(MouseEvent event) {
-                imagePage(mainStage, imageURL);
+                imagePage(mainStage, imagePath);
                 event.consume();
             }
         });
@@ -755,9 +759,15 @@ public class Website extends Application
         }
         else
         {
-            // User Label
-            Label userLabel = new Label("Welcome, " + currentUser + "!");
-            headerRow.getChildren().add(userLabel);
+            // User Button
+            Button userButton = new Button(currentUser);
+            userButton.setOnAction(
+                (ActionEvent event) ->
+                {
+                    userPage(mainStage, currentUser);
+                }
+            );
+            headerRow.getChildren().add(userButton);
         }
 
         // If a user isn't logged in
