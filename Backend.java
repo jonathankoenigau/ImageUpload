@@ -193,6 +193,26 @@ public class Backend
 
         return followFiles;
     }
+    
+    /**
+     * getFollowerImages calls ImageFactory.getFollowerFilePaths to get all 
+     * the images from the users that username is following and return a 
+     * File array of their locations.
+     * 
+     * @param   username The user that is requesting their follower's images.
+     * 
+     * @return File[] of file paths for each image.
+     */
+    public static File[] searchForImages(String[] searchTags) {
+        File[] searchFiles = ImageFactory.searchForImages(searchTags);
+
+        String[] searchImageURLs = new String[searchFiles.length];
+        for(int i = 0; i < searchFiles.length; i++) {
+            searchImageURLs[i] = searchFiles[i].toURI().toString();
+        }
+
+        return searchFiles;
+    }
 
     /**
      * deleteImage calls ImageFactory.deleteImage to delete the given image

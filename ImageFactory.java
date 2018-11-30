@@ -186,6 +186,64 @@ class ImageFactory
         return listOfFiles;
     }
 
+    public static File[] searchForImages(String[] tags)
+    {
+        File[] searchFiles = new File[0];
+        
+        try {
+            Scanner sc = new Scanner(new File("Database.txt"));
+
+            // Loop through all users
+            while(sc.hasNextLine())
+            {
+                // Get each user
+                String user = sc.nextLine().toString();
+                if(!user.equals(""))
+                {
+                    user = user.substring(0, user.indexOf(" "));
+
+                    // Get user's images
+                    File[] listOfFiles = getFilePaths(user);
+
+                    for (File file : listOfFiles) {
+                        // Get Tag File
+                        String tempTag = file.getAbsolutePath();
+                        tempTag = tempTag.substring(0, tempTag.lastIndexOf('.')) + ".txt";
+
+                        File tagFile = new File(tempTag);
+
+                        // Search through tag file
+                        boolean tagMatch = false;
+                        Scanner tagsc = new Scanner(tagFile);
+                        while(tagsc.hasNextLine() && !tagMatch)
+                        {
+                            String fileTag = tagsc.nextLine().toString();
+
+                            for(String searchTag : tags)
+                            {
+                                System.out.println("Given: " + searchTag + ", File: " + fileTag);
+                                if((searchTag.toLowerCase()).equals(fileTag.toLowerCase()))
+                                    tagMatch = true;
+                            }
+                        }
+
+                        if(tagMatch)
+                            searchFiles = combineFileArrays(listOfFiles, new File[]{file});
+                    } 
+                }
+            }
+
+            sc.close();
+            return searchFiles;
+        }
+        catch(IOException ioe){
+            System.out.println("Exception occurred:");
+            ioe.printStackTrace();
+            
+            return searchFiles;
+        }
+    }
+
     /**
      * deleteImage deletes the given image and its corresponding tag file.
      * 
@@ -256,17 +314,8 @@ class ImageFactory
                 }
 
                 // Combine arrays
-                File[] combine = new File[listOfFiles.length + userListOfFiles.length];
-                int i = 0;
-                for (File file : listOfFiles) {
-                    combine[i] = file;
-                    i++;
-                }
-                for (File file : userListOfFiles) {
-                    combine[i] = file;
-                    i++;
-                }
-                
+                File[] combine = combineFileArrays(listOfFiles, userListOfFiles);
+
                 listOfFiles = combine;
             }
 
@@ -277,7 +326,7 @@ class ImageFactory
             return new File[]{new File("error.png")};
         }
     }
-    
+
     /**
      * getUserFromImage gets the username of the user who uploaded the
      * given image.
@@ -292,11 +341,26 @@ class ImageFactory
         // Get the last two indexes of "\"
         int lastIndex = imagePath.lastIndexOf("\\");
         int secondLastIndex = imagePath.lastIndexOf("\\", lastIndex - 1);
-        
+
         System.out.println(lastIndex);
         System.out.println(secondLastIndex);
         System.out.println(imagePath.substring(secondLastIndex + 1, lastIndex));
         return imagePath.substring(secondLastIndex + 1, lastIndex);
+    }
+
+    private static File[] combineFileArrays(File[] arrayOne, File[] arrayTwo) {
+        File[] combine = new File[arrayOne.length + arrayTwo.length];
+        int i = 0;
+        for (File file : arrayOne) {
+            combine[i] = file;
+            i++;
+        }
+        for (File file : arrayTwo) {
+            combine[i] = file;
+            i++;
+        }
+
+        return combine;
     }
 } 
 
