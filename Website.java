@@ -501,10 +501,9 @@ public class Website extends Application
         }
         
         searchHeaderLabel.setText(searchName);
-
-        /**
+        
         // Get all matching images
-        String[] searchImages = Backend.searchForImages(searchTags);
+        File[] searchImages = Backend.searchForImages(searchTags);
         int image = 0;
         // Loop for rows
         // Source for method for rounding up:
@@ -521,14 +520,13 @@ public class Website extends Application
                 if(!(image >= searchImages.length))
                 {
                     // TODO: Get user from image file
-                    row.getChildren().add(clickableImage(mainStage, searchImages[image], userString));
+                    row.getChildren().add(clickableImage(mainStage, searchImages[image]));
                     image++;
                 }
             }
             
             root.getChildren().add(row);
         }
-        */
     }
     
     /**
@@ -734,8 +732,8 @@ public class Website extends Application
                             notEmpty = true;
                     }
                     
-                    //if(notEmpty)
-                        //searchPage(mainStage, tags);
+                    if(notEmpty)
+                        searchPage(mainStage, tags);
                 }
             }
         );
