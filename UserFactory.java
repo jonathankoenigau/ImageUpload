@@ -144,4 +144,19 @@ boolean successful = tempFile.renameTo(inputFile);
 
 }
 }
+
+Public boolean isFollowing(String username, String otherUser){
+
+try{
+       File inputFile = new File("follow.txt");
+BufferedReader reader = new BufferedReader(new FileReader(inputFile));
+  
+  if((otherUser = br.readLine()) != null) 
+      return true;
+}catch(IOException ioe){
+    System.out.println("Exception occurred:");
+                    ioe.printStackTrace();
+                    return false;
+}
+}    
 }
