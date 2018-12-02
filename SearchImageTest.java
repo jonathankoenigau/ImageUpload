@@ -24,10 +24,12 @@ public class SearchImageTest
     public void setUp()
     {
         // Create user and folder
-        usernames = new String[]{"UserA, UserB, UserC"};
-        for(String username: usernames)
+        usernames = new String[]{"UserA", "UserB", "UserC"};
+        int i = 0;
+        for(String username : usernames)
         {
-            Backend.addUser(username, "Test");
+            i++;
+            System.out.println(username + Backend.addUser(username, "Test"));
             
             // Create an empty image
             File testFile = new File("testSearch.jpg");
@@ -37,7 +39,8 @@ public class SearchImageTest
             if(!testFile.exists()) {
                 try {
                     testFile.createNewFile();
-                    Backend.moveImage(testFile.getAbsolutePath(), username, new String[]{"TestTag"});
+                    // Upload image with tags "TestTag" and i
+                    Backend.moveImage(testFile.getAbsolutePath(), username, new String[]{"TestTag", "" + i});
                 }
                 catch (IOException e) {
                     System.err.println("IOException at setup:");
@@ -47,25 +50,27 @@ public class SearchImageTest
         }
     }
     
-    // Not working for some reason
     @Test
-    public void deleteImage()
+    public void searchImage()
     {
-        // Results from searching in user folder before delete
-        //File[] beforeDelete = Backend.getUserImages(username);
+        // Get only image from UserA
+        File[] beforeDelete = Backend.getUserImages(usernames[0]);
+        // This should only have 1 image
+        assertEquals(1, beforeDelete.length);
         
-        // Check if there is a file
-        //assertEquals(1, beforeDelete.length);
+        // Search for UserA's file with "1"
+        File[] userASearch = Backend.searchForImages(new String[]{"1"});
+        // This search should only get 1 image
+        assertEquals(1, userASearch.length);
         
-        // Delete image
-        // The first index of beforeDelete is the uploaded image
-        //Backend.deleteImage(testFilePath);
+        // The files found should be the same
+        assertTrue(beforeDelete[0].getAbsolutePath().equals(userASearch[0].getAbsolutePath()));
         
-        // Results from searching in user folder after delete
-        //File[] afterDelete = Backend.getUserImages(username);
+        // Search for all 3 images using "TestTag"
+        File[] fullSearch = Backend.searchForImages(new String[]{"TestTag"});
         
-        // Check if there isn't a file
-        //assertEquals(0, afterDelete.length);
+        // Check if 3 files were found
+        assertEquals(3, fullSearch.length);
     }
 
     /**
@@ -76,8 +81,20 @@ public class SearchImageTest
     @After
     public void tearDown()
     {
-        // Remove Directory if empty
-        //File folder = new File(username);
-        //folder.delete();
+        // Remove user folders
+        for(String username : usernames)
+        {
+            Backend.deleteImage(new File(username + "\\testSearch.jpg"));
+            
+            File follow = new File(username + "\\follow.txt");
+            follow.delete();
+            
+            File folder = new File(username);
+            folder.delete();
+        }
+        
+        // Remove generated database file
+        File database = new File("Database.txt");
+        database.delete();
     }
 }

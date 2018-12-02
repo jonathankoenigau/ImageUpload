@@ -114,6 +114,18 @@ public class UserFactory{
         }
     }
 
+    /**
+     * removeFollower removes userToFollow from currentUser's follow.txt.
+     * 
+     * This goes through currentUser's follow.txt and copies all its lines
+     * (except the follower to remove) to a temp file, deletes follow.txt
+     * and makes the temp file follow.txt.
+     * 
+     * @param   currentUser The user that wants to remove the follower.
+     *          userToFollow    The follower that will be removed.
+     *          
+     * @return  True if follower was successfully removed, false otherwise.
+     */
     public static boolean removeFollower(String currentUser,String usertoFollow){
         try{
             File inputFile = new File(currentUser + "\\follow.txt");
@@ -146,6 +158,16 @@ public class UserFactory{
         }
     }
 
+    /**
+     * isFollowing checks if username is following otherUser.
+     * 
+     * It checks username's follow.txt to see if otherUser is one of the lines.
+     * 
+     * @param   username    The user to check.
+     *          otherUser   The user that username is or isn't following.
+     *          
+     * @return True if username is following otherUser, false otherwise.
+     */
     public static boolean isFollowing(String username, String otherUser){
         try{
             File inputFile = new File(username + "\\follow.txt");

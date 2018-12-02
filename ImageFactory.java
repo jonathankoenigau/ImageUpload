@@ -140,6 +140,7 @@ class ImageFactory
 
             //Closing BufferedWriter Stream
             bw.close();
+            fw.close();
             System.out.println("Image successfully tagged.");
 
         }catch(IOException ioe){
@@ -186,6 +187,16 @@ class ImageFactory
         return listOfFiles;
     }
 
+    /**
+     * searchForImages() returns images that users have uploaded that have
+     * a tag that matches one of the tags in the given array.
+     * 
+     * This method checks each user's images in the order Database.txt gives.
+     * 
+     * @param   tags    The tags that should be used to find a matching image.
+     * 
+     * @return  A file array of all the matching images.
+     */
     public static File[] searchForImages(String[] tags)
     {
         File[] searchFiles = new File[0];
@@ -226,6 +237,8 @@ class ImageFactory
                                     tagMatch = true;
                             }
                         }
+                        
+                        tagsc.close();
 
                         if(tagMatch)
                             searchFiles = combineFileArrays(searchFiles, new File[]{file});
@@ -348,6 +361,16 @@ class ImageFactory
         return imagePath.substring(secondLastIndex + 1, lastIndex);
     }
 
+    /**
+     * combineFileArrays combines the file arrays arrayOne and arrayTwo
+     * and outputs one array.
+     * 
+     * @param   arrayOne    The first array to combine.
+     *          arrayTwo    The second array to combine.
+     *          
+     * @return  A combined array of both given arrays. This array has
+     *          arrayOne's files first, then arrayTwo's.
+     */
     private static File[] combineFileArrays(File[] arrayOne, File[] arrayTwo) {
         File[] combine = new File[arrayOne.length + arrayTwo.length];
         int i = 0;
