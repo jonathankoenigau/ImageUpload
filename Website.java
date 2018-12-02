@@ -350,7 +350,7 @@ public class Website extends Application
         String userString = ImageFactory.getUserFromImage(imagePath.getAbsolutePath());
         
         // If the image was uploaded by the logged in user, add a delete button
-        if(currentUser.equals(userString))
+        if(currentUser != null && currentUser.equals(userString))
         {
             Button deleteButton = new Button("Delete Image");
             deleteButton.setOnAction(
@@ -422,16 +422,34 @@ public class Website extends Application
         
         if(currentUser != null && !currentUser.equals(userString))
         {
-            Button followButton = new Button("Follow");
-            followButton.setOnAction(
-                (ActionEvent event) ->
-                    {
-                        // Returns true if succeeded, returns false if failed
-                        // Maybe do something with that
-                        Backend.addFollower(currentUser, userString);
-                    }
-                );
-            root.getChildren().add(followButton);
+            if(!UserFactory.isFollowing(currentUser, userString))
+            {
+                Button followButton = new Button("Follow");
+                followButton.setOnAction(
+                    (ActionEvent event) ->
+                        {
+                            // Returns true if succeeded, returns false if failed
+                            // Maybe do something with that
+                            Backend.addFollower(currentUser, userString);
+                            userPage(mainStage, userString);
+                        }
+                    );
+                root.getChildren().add(followButton);
+            }
+            else
+            {
+                Button unfollowButton = new Button("Unfollow");
+                unfollowButton.setOnAction(
+                    (ActionEvent event) ->
+                        {
+                            // Returns true if succeeded, returns false if failed
+                            // Maybe do something with that
+                            UserFactory.removeFollower(currentUser, userString);
+                            userPage(mainStage, userString);
+                        }
+                    );
+                root.getChildren().add(unfollowButton);
+            }
         }
 
         // If the user exists
@@ -517,9 +535,8 @@ public class Website extends Application
 
             for(int j = 0; j < 4; j++)
             {
-                if(!(image >= searchImages.length))
+                if(image < searchImages.length)
                 {
-                    // TODO: Get user from image file
                     row.getChildren().add(clickableImage(mainStage, searchImages[image]));
                     image++;
                 }

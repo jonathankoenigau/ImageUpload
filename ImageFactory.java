@@ -228,7 +228,7 @@ class ImageFactory
                         }
 
                         if(tagMatch)
-                            searchFiles = combineFileArrays(listOfFiles, new File[]{file});
+                            searchFiles = combineFileArrays(searchFiles, new File[]{file});
                     } 
                 }
             }

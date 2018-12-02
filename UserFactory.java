@@ -114,49 +114,58 @@ public class UserFactory{
         }
     }
 
-public boolean removeFollower(String currentUser,String usertoFollow){
-   try{
-       File inputFile = new File("follow.txt");
-File tempFile = new File("myTempFile.txt");
+    public static boolean removeFollower(String currentUser,String usertoFollow){
+        try{
+            File inputFile = new File(currentUser + "\\follow.txt");
+            File tempFile = new File("myTempFile.txt");
 
-BufferedReader reader = new BufferedReader(new FileReader(inputFile));
-BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile));
+            BufferedReader reader = new BufferedReader(new FileReader(inputFile));
+            BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile));
 
-String lineToRemove = usertoFollow;
-String currentLine;
+            String lineToRemove = usertoFollow;
+            String currentLine;
 
-while((currentLine = reader.readLine()) != null) {
-    // trim newline when comparing with lineToRemove
-    String trimmedLine = currentLine.trim();
-    if(trimmedLine.equals(lineToRemove)) continue;
-    writer.write(currentLine + System.getProperty("line.separator"));
-}
-writer.close(); 
-reader.close(); 
-boolean successful = tempFile.renameTo(inputFile);
-    
-    
-    return true;
-}catch(IOException ioe){
-                    System.out.println("Exception occurred:");
-                    ioe.printStackTrace();
-                    return false;
+            while((currentLine = reader.readLine()) != null) {
+                // trim newline when comparing with lineToRemove
+                String trimmedLine = currentLine.trim();
+                if(trimmedLine.equals(lineToRemove)) continue;
+                writer.write(currentLine + System.getProperty("line.separator"));
+            }
+            writer.close(); 
+            reader.close();
+            
+            System.out.println(inputFile.delete());
+            boolean successful = tempFile.renameTo(inputFile);
 
-}
-}
+            return true;
+        }catch(IOException ioe){
+            System.out.println("Exception occurred:");
+            ioe.printStackTrace();
+            return false;
 
-Public boolean isFollowing(String username, String otherUser){
+        }
+    }
 
-try{
-       File inputFile = new File("follow.txt");
-BufferedReader reader = new BufferedReader(new FileReader(inputFile));
-  
-  if((otherUser = br.readLine()) != null) 
-      return true;
-}catch(IOException ioe){
-    System.out.println("Exception occurred:");
-                    ioe.printStackTrace();
-                    return false;
-}
-}    
+    public static boolean isFollowing(String username, String otherUser){
+        try{
+            File inputFile = new File(username + "\\follow.txt");
+            BufferedReader reader = new BufferedReader(new FileReader(inputFile));
+
+            String currentLine;
+            while((currentLine = reader.readLine()) != null) {
+                // trim newline when comparing with lineToRemove
+                String trimmedLine = currentLine.trim();
+                if(trimmedLine.equals(otherUser)) {
+                    reader.close();
+                    return true;
+                }
+            }
+        }catch(IOException ioe){
+            System.out.println("Exception occurred:");
+            ioe.printStackTrace();
+            return false;
+        }
+        
+        return false;
+    }    
 }
