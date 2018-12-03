@@ -54,9 +54,9 @@ public class SearchImageTest
     public void searchImage()
     {
         // Get only image from UserA
-        File[] beforeDelete = Backend.getUserImages(usernames[0]);
+        File[] userAImages = Backend.getUserImages(usernames[0]);
         // This should only have 1 image
-        assertEquals(1, beforeDelete.length);
+        assertEquals(1, userAImages.length);
         
         // Search for UserA's file with "1"
         File[] userASearch = Backend.searchForImages(new String[]{"1"});
@@ -64,7 +64,7 @@ public class SearchImageTest
         assertEquals(1, userASearch.length);
         
         // The files found should be the same
-        assertTrue(beforeDelete[0].getAbsolutePath().equals(userASearch[0].getAbsolutePath()));
+        assertTrue(userAImages[0].getAbsolutePath().equals(userASearch[0].getAbsolutePath()));
         
         // Search for all 3 images using "TestTag"
         File[] fullSearch = Backend.searchForImages(new String[]{"TestTag"});
