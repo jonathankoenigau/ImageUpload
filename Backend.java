@@ -237,4 +237,85 @@ public class Backend
     public static boolean addFollower(String currentUser, String userToFollow) {
         return UserFactory.addFollower(currentUser, userToFollow);
     }
+    
+    /**
+     * isFollowing calls UserFactory.isFollowing to check if username is 
+     * following otherUser.
+     * 
+     * It checks username's follow.txt to see if otherUser is one of the lines.
+     * 
+     * @param   username    The user to check.
+     *          otherUser   The user that username is or isn't following.
+     *          
+     * @return True if username is following otherUser, false otherwise.
+     */
+    public static boolean isFollowing(String username, String otherUser) {
+        return UserFactory.isFollowing(username, otherUser);
+    }
+    
+    /**
+     * removeFollower calls UserFactory.removeFollower to remove userToFollow
+     * from currentUser's follow.txt.
+     * 
+     * This goes through currentUser's follow.txt and copies all its lines
+     * (except the follower to remove) to a temp file, deletes follow.txt
+     * and makes the temp file follow.txt.
+     * 
+     * @param   currentUser The user that wants to remove the follower.
+     *          userToFollow    The follower that will be removed.
+     *          
+     * @return  True if follower was successfully removed, false otherwise.
+     */
+    public static boolean removeFollower(String currentUser, String userToFollow) {
+        return UserFactory.removeFollower(currentUser, userToFollow);
+    }
+    
+    /**
+     * getUserFromImage calls ImageFactory.getUserFromImage to get the 
+     * username of the user who uploaded the given image.
+     * 
+     * This is done by getting the name of the folder the file is currently in.
+     * 
+     * @param   imagePath The image file used to find the user.
+     * 
+     * @return String of the user's username.
+     */
+    public static String getUserFromImage(String imagePath) {
+        return ImageFactory.getUserFromImage(imagePath);
+    }
+    
+    /**
+     * checkAdmin calls UserFactory.checkAdmin to check if the given
+     * user is an admin.
+     * 
+     * This is done by checking if the given user is in admin.txt
+     * 
+     * @param   user    The user to check.
+     * 
+     * @return  True if the user is an admin, false otherwise.
+     * 
+     * public static boolean checkAdmin(String user) {
+     *     return UserFactory.checkAdmin(user);
+     * }
+     */
+    
+    /**
+     * deleteUser calls UserFacotry.deleteUser to delete the given user 
+     * from ImageUpload.
+     * 
+     * This is done by deleting everything in the user's folder,
+     * deleting the user's folder, and removing the user from
+     * Database.txt
+     * 
+     * This should only be called by admins. This check is done
+     * in the frontend.
+     * 
+     * @param   user    The user to delete.
+     * 
+     * @return  True if the user was successfully deleted, false otherwise.
+     * 
+     * public static boolean deleteUser(String user) {
+     *     return UserFactory.deleteUser(user);
+     * }
+     */
 }

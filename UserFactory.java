@@ -190,5 +190,30 @@ public class UserFactory{
         }
         
         return false;
-    }    
+    }  
+    
+    /**
+     * checkAdmin checks if the given user is an admin.
+     * 
+     * This is done by checking if the given user is in admin.txt
+     * 
+     * @param   user    The user to check.
+     * 
+     * @return  True if the user is an admin, false otherwise.
+     */
+    
+    /**
+     * deleteUser deletes the given user from ImageUpload.
+     * 
+     * This is done by deleting everything in the user's folder,
+     * deleting the user's folder, and removing the user from
+     * Database.txt
+     * 
+     * This should only be called by admins. This check is done
+     * in the frontend.
+     * 
+     * @param   user    The user to delete.
+     * 
+     * @return  True if the user was successfully deleted, false otherwise.
+     */
 }

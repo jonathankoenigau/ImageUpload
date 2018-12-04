@@ -704,6 +704,14 @@ public class Website extends Application
         title.setFont(new Font(36));
 
         header.getChildren().add(title);
+        
+        // If the currentUser is an admin, add a message saying this
+        if(isAdmin) {
+            Label adminLabel = new Label("Logged in as an Admin");
+            adminLabel.setFont(new Font(14));
+            
+            header.getChildren().add(adminLabel);
+        }
 
         // *** The row under the title ***
         HBox headerRow = new HBox();
