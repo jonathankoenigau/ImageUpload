@@ -49,6 +49,7 @@ public class UserFactory{
                 bw.newLine();
                 //Closing BufferedWriter Stream
                 bw.close();
+                fw.close();
 
                 System.out.println("Data successfully appended at the end of file");
 

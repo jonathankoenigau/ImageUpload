@@ -38,6 +38,7 @@ public class Website extends Application
     private double height = 720;
 
     private String currentUser = null;
+    private boolean isAdmin = false;
 
     // Run this method to start the program
     public static void main(String[] args) 
@@ -237,6 +238,7 @@ public class Website extends Application
                     if(Backend.logInUser(usernameField.getText(), passwordField.getText()))
                     {
                         currentUser = usernameField.getText();
+                        //isAdmin = Backend.checkAdmin(currentUser);
                         start(mainStage);
                     }
                     else {
@@ -349,8 +351,10 @@ public class Website extends Application
         // User who uploaded image
         String userString = ImageFactory.getUserFromImage(imagePath.getAbsolutePath());
         
-        // If the image was uploaded by the logged in user, add a delete button
-        if(currentUser != null && currentUser.equals(userString))
+        // If the image was uploaded by the logged in user or the current 
+        // user is an admin, add a delete button
+        if(currentUser != null && 
+           (currentUser.equals(userString) || isAdmin))
         {
             Button deleteButton = new Button("Delete Image");
             deleteButton.setOnAction(
@@ -450,6 +454,30 @@ public class Website extends Application
                     );
                 root.getChildren().add(unfollowButton);
             }
+            
+            /**
+            if(isAdmin && !Backend.checkAdmin(userString))
+            {
+                Button deleteButton = new Button("Delete User");
+                deleteButton.setOnAction(
+                    (ActionEvent event) ->
+                    {
+                        // Ask if the admin really wants to delete the user
+                        Alert alert = new Alert(AlertType.CONFIRMATION);
+                        alert.setTitle("Warning!");
+                        alert.setHeaderText("Delete Image");
+                        alert.setContentText("Are you sure you want to delete the user " + userString + "?");
+                        Optional<ButtonType> result = alert.showAndWait();
+                        // If the admin presses OK
+                        if (result.isPresent() && result.get() == ButtonType.OK) {
+                            Backend.deleteUser(userString);
+                            start(mainStage);
+                        }
+                    }
+                );
+                root.getChildren().add(deleteButton);
+                }
+            */
         }
 
         // If the user exists
