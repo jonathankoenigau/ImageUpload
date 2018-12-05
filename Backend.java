@@ -293,11 +293,10 @@ public class Backend
      * @param   user    The user to check.
      * 
      * @return  True if the user is an admin, false otherwise.
-     * 
-     * public static boolean checkAdmin(String user) {
-     *     return UserFactory.checkAdmin(user);
-     * }
      */
+    public static boolean checkAdmin(String user) {
+        return UserFactory.checkAdmin(user);
+    }
     
     /**
      * deleteUser calls UserFacotry.deleteUser to delete the given user 
@@ -314,8 +313,8 @@ public class Backend
      * 
      * @return  True if the user was successfully deleted, false otherwise.
      * 
-     * public static boolean deleteUser(String user) {
-     *     return UserFactory.deleteUser(user);
-     * }
+    public static boolean deleteUser(String user) {
+        return UserFactory.deleteUser(user);
+    }
      */
 }

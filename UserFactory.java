@@ -146,7 +146,7 @@ public class UserFactory{
             }
             writer.close(); 
             reader.close();
-            
+
             System.out.println(inputFile.delete());
             boolean successful = tempFile.renameTo(inputFile);
 
@@ -188,10 +188,10 @@ public class UserFactory{
             ioe.printStackTrace();
             return false;
         }
-        
+
         return false;
     }  
-    
+
     /**
      * checkAdmin checks if the given user is an admin.
      * 
@@ -201,7 +201,49 @@ public class UserFactory{
      * 
      * @return  True if the user is an admin, false otherwise.
      */
-    
+    public static boolean checkAdmin(String username){
+        File fileName2 = new File("admin.txt");
+        
+        // Create admin file if it doesn't exist
+        if(!fileName2.exists()){
+            try {
+                fileName2.createNewFile();
+                System.out.println("New File admin.txt created");
+            }
+            catch(IOException e) {
+                System.out.println("Error creating admin file");
+            }
+        }
+        else{
+            System.out.println("admin.txt already exists.");
+        }
+        
+        int count = 0;
+        try{
+            Scanner scan = new Scanner(fileName2);
+
+            while (scan.hasNext()){
+                String line = scan.nextLine().toLowerCase().toString();
+                if (line.equals(username)){
+                    System.out.println(line);
+                    count++;
+                }
+
+            }
+        }catch(Exception e){
+            System.out.println("Error");
+
+        } 
+
+        if (count > 0) {
+            System.out.println("Is admin");
+            return true;
+        } else{
+            System.out.println("Is NOT admin");
+            return false;
+        }
+    }
+
     /**
      * deleteUser deletes the given user from ImageUpload.
      * 

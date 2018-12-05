@@ -238,7 +238,7 @@ public class Website extends Application
                     if(Backend.logInUser(usernameField.getText(), passwordField.getText()))
                     {
                         currentUser = usernameField.getText();
-                        //isAdmin = Backend.checkAdmin(currentUser);
+                        isAdmin = Backend.checkAdmin(currentUser);
                         start(mainStage);
                     }
                     else {
@@ -455,7 +455,6 @@ public class Website extends Application
                 root.getChildren().add(unfollowButton);
             }
             
-            /**
             if(isAdmin && !Backend.checkAdmin(userString))
             {
                 Button deleteButton = new Button("Delete User");
@@ -470,14 +469,13 @@ public class Website extends Application
                         Optional<ButtonType> result = alert.showAndWait();
                         // If the admin presses OK
                         if (result.isPresent() && result.get() == ButtonType.OK) {
-                            Backend.deleteUser(userString);
+                            //Backend.deleteUser(userString);
                             start(mainStage);
                         }
                     }
                 );
                 root.getChildren().add(deleteButton);
                 }
-            */
         }
 
         // If the user exists
@@ -845,6 +843,7 @@ public class Website extends Application
                 (ActionEvent event) ->
                 {
                     currentUser = null;
+                    isAdmin = false;
 
                     // Goes back to home page, but maybe just send them
                     // back to the page they were looking at.
