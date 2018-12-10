@@ -464,13 +464,22 @@ public class Website extends Application
                         // Ask if the admin really wants to delete the user
                         Alert alert = new Alert(AlertType.CONFIRMATION);
                         alert.setTitle("Warning!");
-                        alert.setHeaderText("Delete Image");
+                        alert.setHeaderText("Delete User");
                         alert.setContentText("Are you sure you want to delete the user " + userString + "?");
                         Optional<ButtonType> result = alert.showAndWait();
                         // If the admin presses OK
                         if (result.isPresent() && result.get() == ButtonType.OK) {
-                            Backend.deleteUser(userString);
-                            start(mainStage);
+                            // Ask if the admin really wants to delete the user again
+                            Alert alertTwo = new Alert(AlertType.CONFIRMATION);
+                            alert.setTitle("Warning!");
+                            alert.setHeaderText("Delete User");
+                            alert.setContentText("Are you ABSOLUTELY sure you want to delete the user " + userString + "?\nThis is irreversible.");
+                            Optional<ButtonType> resultTwo = alert.showAndWait();
+                            // If the admin presses OK
+                            if (resultTwo.isPresent() && resultTwo.get() == ButtonType.OK) {
+                                Backend.deleteUser(userString);
+                                start(mainStage);
+                            }
                         }
                     }
                 );
