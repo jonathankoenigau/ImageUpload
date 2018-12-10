@@ -313,8 +313,8 @@ public class Backend
      * 
      * @return  True if the user was successfully deleted, false otherwise.
      * 
+     */
     public static boolean deleteUser(String user) {
         return UserFactory.deleteUser(user);
     }
-     */
 }

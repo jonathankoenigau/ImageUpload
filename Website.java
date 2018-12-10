@@ -469,7 +469,7 @@ public class Website extends Application
                         Optional<ButtonType> result = alert.showAndWait();
                         // If the admin presses OK
                         if (result.isPresent() && result.get() == ButtonType.OK) {
-                            //Backend.deleteUser(userString);
+                            Backend.deleteUser(userString);
                             start(mainStage);
                         }
                     }

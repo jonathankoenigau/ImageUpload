@@ -162,6 +162,7 @@ class ImageFactory
         File folder = new File(username);
         if (!folder.exists()){
             System.out.println("Doesn't exist.");
+            return new File[0];
         }
 
         // Make sure this only returns image files

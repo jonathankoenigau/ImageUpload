@@ -39,7 +39,7 @@ public class DeleteUserTest
         
         // Give UserA an image
         // Create an empty image
-        File testFile = new File("testDelete.jpg");
+        File testFile = new File("testDelete.png");
         /* This logic is to create the file if the
          * file is not already present
          */
@@ -88,10 +88,8 @@ public class DeleteUserTest
         // This should only have 1 image
         assertEquals(1, userABeforeDelete.length);
         
-        /**
         // Admin deletes UserA
         Backend.deleteUser(user);
-        */
         
         // Get images from UserA
         File[] userAAfterDelete = Backend.getUserImages(user);
@@ -110,6 +108,8 @@ public class DeleteUserTest
             }
             
             assertFalse(userAExists);
+            
+            sc.close();
         }
         catch (IOException e) {
             System.err.println("IOException in test:");

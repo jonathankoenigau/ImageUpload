@@ -258,4 +258,109 @@ public class UserFactory{
      * 
      * @return  True if the user was successfully deleted, false otherwise.
      */
+    public static boolean deleteUser(String user){
+
+        //This part deletes everything in a users folder
+
+        //folderName can be replaced with username
+        File folder = new File(user);
+        if (!folder.exists()){
+            System.out.println("Doesn't exist.");
+        }
+
+        
+        File[] listOfFiles = folder.listFiles();
+
+        int size = listOfFiles.length;
+        System.out.println("Number of files: " + size);
+
+        if (size == 0){
+            System.out.println("Folder is empty.");
+        } else{
+
+            for (File file : listOfFiles) {
+                if (file.isFile()) {
+                    System.out.println("File Name: " + file.getName());
+                    //System.out.println("Absolute path:" + file.getAbsolutePath());
+                    File fileToBeDeleted = new File (file.getAbsolutePath());
+                    try{
+                        if (fileToBeDeleted.delete()){
+                            System.out.println("File Deleted");
+                        }else{
+                            System.out.println("File deletion failed.");
+                        }
+                    }
+                    catch(Exception e){
+                        System.out.println("Error");
+                    }
+                } 
+            }
+        }
+        
+        folder.delete();
+
+        
+        // // this next part deletes the user from database.txt
+        Formatter x;
+        try{
+            x = new Formatter ("temporarySearchFile2.txt");
+            x.close();
+        }
+        catch (Exception e) {
+            System.out.println("An error occured.");
+        }
+
+       
+        try{
+            Scanner scan = new Scanner(new File("Database.txt"));
+            int count = 0;
+            while (scan.hasNext()){
+                
+                String line2 = scan.nextLine().toString();
+                String line2Username = line2.split(" ")[0];
+                if (!line2Username.equals(user)){
+                    
+
+                    try
+                    {
+                        FileWriter fw = new FileWriter("temporarySearchFile2.txt", true);
+                        BufferedWriter bw = new BufferedWriter(fw);
+                        PrintWriter out = new PrintWriter(bw);
+                        out.println(line2);
+                        
+                        out.close();
+                        bw.close();
+                        fw.close();
+                        
+                        
+                    } catch (IOException e) {
+                        //exception handling left as an exercise for the reader
+                        System.out.println("temporarySearchFile2 has NOT been created."); 
+                    }
+
+                    count++;
+
+                    
+                }
+
+            }
+            
+            scan.close();
+            
+            if(count == 0){
+                System.out.println("Nothing found.");
+            }
+        }catch(Exception e) {
+        
+        }
+        
+        File DatabaseFile = new File("Database.txt");
+        File deleteDatabaseFile = new File(DatabaseFile.getAbsolutePath());
+        deleteDatabaseFile.delete();
+        
+        File newDatabaseFile = new File("temporarySearchFile2.txt");
+        newDatabaseFile.renameTo(new File("Database.txt"));
+        
+        return true;
+    }
 }
